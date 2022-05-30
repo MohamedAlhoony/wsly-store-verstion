@@ -1,0 +1,37 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" width="1500" height="500">
+	<title>template</title>
+	<defs>
+		<image width="448" height="448" id="img1" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTAiIGhlaWdodD0iMjUwIiBjb2xvcj0iI2Y1YTYyYiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY2FydC1maWxsIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0wIDEuNUEuNS41IDAgMCAxIC41IDFIMmEuNS41IDAgMCAxIC40ODUuMzc5TDIuODkgM0gxNC41YS41LjUgMCAwIDEgLjQ5MS41OTJsLTEuNSA4QS41LjUgMCAwIDEgMTMgMTJINGEuNS41IDAgMCAxLS40OTEtLjQwOEwyLjAxIDMuNjA3IDEuNjEgMkguNWEuNS41IDAgMCAxLS41LS41ek01IDEyYTIgMiAwIDEgMCAwIDQgMiAyIDAgMCAwIDAtNHptNyAwYTIgMiAwIDEgMCAwIDQgMiAyIDAgMCAwIDAtNHptLTcgMWExIDEgMCAxIDEgMCAyIDEgMSAwIDAgMSAwLTJ6bTcgMGExIDEgMCAxIDEgMCAyIDEgMSAwIDAgMSAwLTJ6Ii8+Cjwvc3ZnPg=="/>
+	</defs>
+	<style>
+		tspan { white-space:pre } 
+		.s0 { fill: #385278 } 
+	</style>
+	<path id="Background" class="s0" d="m0 0h1500v500h-1500z"/>
+	<g id="Border-right">
+		<g id="sticks">
+			<g id="Folder 1 copy">
+				<use id="cart-fill" href="#img1" transform="matrix(-0.147,.136,.136,.147,1141.096,13.088)"/>
+				<use id="cart-fill copy" href="#img1" transform="matrix(-0.197,-0.039,-0.039,.197,1441.331,18.269)"/>
+				<use id="cart-fill copy 2" href="#img1" transform="matrix(-0.197,-0.039,-0.039,.197,1296.331,189.269)"/>
+				<use id="cart-fill copy 3" href="#img1" transform="matrix(-0.155,-0.128,-0.128,.155,1465.737,200.457)"/>
+				<use id="cart-fill copy 4" href="#img1" transform="matrix(-0.139,.145,.145,.139,1196.62,357.551)"/>
+				<use id="cart-fill copy 5" href="#img1" transform="matrix(-0.2,-0.005,-0.005,.2,1419.452,405.21)"/>
+				<use id="cart-fill copy 6" href="#img1" transform="matrix(-0.2,-0.005,-0.005,.2,1494.452,266.21)"/>
+			</g>
+		</g>
+	</g>
+	<g id="Border-left">
+		<g id="sticks">
+			<g id="Folder 1">
+				<use id="cart-fill" href="#img1" transform="matrix(.147,.136,-0.136,.147,356.904,18.088)"/>
+				<use id="cart-fill copy" href="#img1" transform="matrix(.197,-0.039,.039,.197,56.669,23.269)"/>
+				<use id="cart-fill copy 2" href="#img1" transform="matrix(.197,-0.039,.039,.197,201.669,194.269)"/>
+				<use id="cart-fill copy 3" href="#img1" transform="matrix(.155,-0.128,.128,.155,32.263,205.457)"/>
+				<use id="cart-fill copy 4" href="#img1" transform="matrix(.139,.145,-0.145,.139,301.38,362.551)"/>
+				<use id="cart-fill copy 5" href="#img1" transform="matrix(.2,-0.005,.005,.2,78.548,410.21)"/>
+				<use id="cart-fill copy 6" href="#img1" transform="matrix(.2,-0.005,.005,.2,3.548,271.21)"/>
+			</g>
+		</g>
+	</g>
+</svg>

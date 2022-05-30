@@ -1,0 +1,20 @@
+<svg id="Symbol_149" data-name="Symbol 149" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35.651" height="35.651" viewBox="0 0 35.651 35.651">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="0.216" y1="-0.263" x2="1.375" y2="1.649" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#4bca55"/>
+      <stop offset="0.962" stop-color="#0f86eb"/>
+      <stop offset="1" stop-color="#0d84f0"/>
+    </linearGradient>
+  </defs>
+  <rect id="Rectangle_460" data-name="Rectangle 460" class="cls-1" width="35.651" height="35.651" transform="translate(0 0)"/>
+  <path id="Checkbox" class="cls-2" d="M14.137,24.587,0,10.449,2.868,7.581,14.137,18.645,32.782,0l2.868,2.868Z" transform="translate(0 4.457)"/>
+</svg>

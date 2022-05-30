@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="74" height="74" viewBox="0 0 74 74">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #0d84f0;
+      }
+
+      .cls-3 {
+        filter: url(#Ellipse_18);
+      }
+    </style>
+    <filter id="Ellipse_18" x="0" y="0" width="74" height="74" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_199" data-name="Group 199" transform="translate(833 3646) rotate(180)">
+    <g class="cls-3" transform="matrix(-1, 0, 0, -1, 833, 3646)">
+      <circle id="Ellipse_18-2" data-name="Ellipse 18" class="cls-1" cx="28" cy="28" r="28" transform="translate(65 62) rotate(180)"/>
+    </g>
+    <g id="Symbol_44_2" data-name="Symbol 44 – 2" transform="translate(705 3119)">
+      <path id="Path_10" data-name="Path 10" class="cls-2" d="M10.75,0,8.8,1.955l7.4,7.4H0v2.792H16.195l-7.4,7.4L10.75,21.5,21.5,10.75Z" transform="translate(101.5 503.5) rotate(180)"/>
+    </g>
+  </g>
+</svg>

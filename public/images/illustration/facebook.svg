@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27" height="27" viewBox="0 0 27 27">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #cfd5e5;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke: #cfd5e5;
+      }
+
+      .cls-3 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+
+      .cls-5 {
+        fill: none;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <path id="Path_402" data-name="Path 402" class="cls-1" d="M0-23.055H6.4V-9.284H0Z" transform="translate(0 23.055)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_257" data-name="Group 257" transform="translate(-235 -6471)">
+    <g id="Ellipse_27" data-name="Ellipse 27" class="cls-2" transform="translate(235 6471)">
+      <circle class="cls-4" cx="13.5" cy="13.5" r="13.5"/>
+      <circle class="cls-5" cx="13.5" cy="13.5" r="13"/>
+    </g>
+    <g id="Group_256" data-name="Group 256" transform="translate(245 6500.394)">
+      <g id="Group_255" data-name="Group 255" class="cls-3" transform="translate(0 -23.055)">
+        <g id="Group_254" data-name="Group 254" transform="translate(0 0)">
+          <path id="Path_401" data-name="Path 401" class="cls-1" d="M-4.147-4.645H-6.076V2.236H-8.937V-4.645H-10.3V-7.076h1.36V-8.649a2.683,2.683,0,0,1,2.886-2.886l2.119.009v2.36H-5.47a.582.582,0,0,0-.606.662v1.431H-3.9Z" transform="translate(10.297 11.535)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

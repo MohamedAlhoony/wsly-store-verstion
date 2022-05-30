@@ -1,0 +1,123 @@
+import * as React from 'react'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import Checkbox from '@mui/material/Checkbox'
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
+export default function SubmitModal(props) {
+    return (
+        <Dialog
+            onBackdropClick={() => {}}
+            dir="rtl"
+            fullWidth
+            maxWidth="md"
+            open={props.submitModal.show}
+            onClose={props.handleToggleSubmitModal}
+        >
+            <DialogTitle>اتمام الطلب</DialogTitle>
+
+            <DialogContent>
+                {props.submitModal.isLoading ? (
+                    <Grid
+                        item
+                        xs={12}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        sx={{ height: 1, width: 1 }}
+                    >
+                        <CircularProgress />
+                    </Grid>
+                ) : (
+                    <>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) =>
+                                        props.handleSubmitModalInputChange({
+                                            id: 'clientName',
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    value={props.submitModal.clientName}
+                                    label="الاسم"
+                                    fullWidth
+                                    type="text"
+                                    variant="filled"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    onChange={(e) =>
+                                        props.handleSubmitModalInputChange({
+                                            id: 'telNo',
+                                            value: e.target.value,
+                                        })
+                                    }
+                                    value={props.submitModal.telNo}
+                                    label="رقم الهاتف"
+                                    fullWidth
+                                    type="text"
+                                    variant="filled"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            onChange={(e) =>
+                                                props.handleSubmitModalInputChange(
+                                                    {
+                                                        id: 'isDelivery',
+                                                        value: e.target.checked,
+                                                    }
+                                                )
+                                            }
+                                            checked={
+                                                props.submitModal.isDelivery
+                                            }
+                                        />
+                                    }
+                                    label="مع التوصيل"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12} mt={5}>
+                            <Button
+                                disabled={
+                                    props.submitModal.telNo === '' ||
+                                    props.submitModal.clientName === ''
+                                }
+                                onClick={props.submit}
+                                endIcon={<ShoppingCartCheckoutIcon />}
+                                size={'large'}
+                                variant="contained"
+                            >
+                                طلب
+                            </Button>
+                        </Grid>
+                    </>
+                )}
+            </DialogContent>
+            <DialogActions>
+                <Button
+                    disabled={props.submitModal.isLoading}
+                    onClick={props.handleToggleSubmitModal}
+                >
+                    إلغاء
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
