@@ -8,9 +8,11 @@ import {
     IconButton,
     CardContent,
     Typography,
+    Avatar,
 } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PaidIcon from '@mui/icons-material/Paid'
+import { StyledBadge } from '../../home'
 const getQuentity = (id, cart) => {
     let qtySum = 0
     cart.slice().forEach((item) => {
@@ -19,9 +21,9 @@ const getQuentity = (id, cart) => {
         }
     })
     if (qtySum !== 0) {
-        return 'الكمية في السلة: ' + qtySum
+        return qtySum
     } else {
-        return ''
+        return 0
     }
 }
 const getCard = (item, handleItemListClick, cart) => {
@@ -38,31 +40,34 @@ const getCard = (item, handleItemListClick, cart) => {
             >
                 <CardHeader
                     title={item.Name}
-                    subheader={[
-                        <span key={0}>{getQuentity(item.Id, cart)}</span>,
-                    ]}
+                    // subheader={[
+                    //     <span key={0}>{getQuentity(item.Id, cart)}</span>,
+                    // ]}
                 />
                 <CardContent></CardContent>
                 <CardActions sx={{ justifyContent: 'space-between' }}>
                     <IconButton onClick={() => handleItemListClick(item)}>
-                        <AddShoppingCartIcon color={'primary'} />
+                        <StyledBadge
+                            badgeContent={getQuentity(item.Id, cart)}
+                            color="secondary"
+                        >
+                            <AddShoppingCartIcon color={'primary'} />
+                        </StyledBadge>
                     </IconButton>
-                    <Typography
-                        component="span"
+                    <Avatar
                         sx={{
-                            p: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 700,
-                            color: 'inherit',
-                            textDecoration: 'none',
+                            fontSize: 16,
+                            bgcolor: '#f5a62b',
+                            width: 'auto',
+                            px: 1,
+                            borderRadius: 1,
+                            fontWeight: 'bold',
                         }}
                     >
                         &nbsp;
                         {item.Price}
                         &nbsp; دينار
-                    </Typography>
+                    </Avatar>
                 </CardActions>
             </Card>
         </Box>

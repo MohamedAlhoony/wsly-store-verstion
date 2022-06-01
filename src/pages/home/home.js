@@ -16,7 +16,7 @@ import StoreMallDirectoryOutlinedIcon from '@mui/icons-material/StoreMallDirecto
 import AppBar from '@mui/material/AppBar'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
-const StyledBadge = styled(Badge)(({ theme }) => ({
+export const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
         right: -3,
         top: 13,
@@ -24,6 +24,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
         padding: '0 4px',
     },
 }))
+
 const Home = (props) => {
     let { storeID } = useParams()
     useEffect(() => {
@@ -92,6 +93,13 @@ const Home = (props) => {
     const handleCartQtyChange = ({ id, index }) => {
         props.dispatch(actions.handleCartQtyChange({ id, index }))
     }
+    const getCartLength = () => {
+        let cartQty = 0
+        props.cart.forEach((item) => {
+            cartQty += item.qty
+        })
+        return cartQty
+    }
     return (
         <Box sx={{ width: '100%' }}>
             <AppBar
@@ -145,7 +153,7 @@ const Home = (props) => {
                     <Tab
                         icon={
                             <StyledBadge
-                                badgeContent={props.cart.length}
+                                badgeContent={getCartLength()}
                                 color="secondary"
                             >
                                 <ShoppingCartIcon />

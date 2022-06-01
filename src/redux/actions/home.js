@@ -252,7 +252,7 @@ export const addToCart = () => {
             // },
         })
         dispatch({ type: 'home_page-cart', data: cart })
-        dispatch(orderModal({ show: false }))
+        dispatch(orderModal({ show: false, qty: 1, forName: '' }))
         dispatch(
             snackBar({
                 show: true,
