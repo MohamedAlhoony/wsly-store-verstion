@@ -1,18 +1,18 @@
 import * as React from 'react'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormControl from '@mui/material/FormControl'
-import FormLabel from '@mui/material/FormLabel'
 import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
+import Paper from '@mui/material/Paper'
+import InputBase from '@mui/material/InputBase'
+import Divider from '@mui/material/Divider'
+import PersonIcon from '@mui/icons-material/Person'
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits'
 import Preferences from './preferences/preferences'
 export default function OrderModal(props) {
     return (
@@ -34,7 +34,31 @@ export default function OrderModal(props) {
                 <DialogContent>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
-                            <TextField
+                            <Paper
+                                variant="outlined"
+                                component="form"
+                                sx={{
+                                    p: '2px 4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <InputBase
+                                    onChange={(e) =>
+                                        props.handleForNameChange(
+                                            e.target.value
+                                        )
+                                    }
+                                    value={props.orderModal.forName}
+                                    sx={{ ml: 1, flex: 1 }}
+                                    placeholder="الاسم"
+                                />
+                                <PersonIcon
+                                    color={'action'}
+                                    sx={{ p: '10px' }}
+                                />
+                            </Paper>
+                            {/* <TextField
                                 onChange={(e) =>
                                     props.handleForNameChange(e.target.value)
                                 }
@@ -43,9 +67,59 @@ export default function OrderModal(props) {
                                 fullWidth
                                 type="text"
                                 variant="filled"
-                            />
+                            /> */}
                         </Grid>
                         <Grid item xs={12} sm={6}>
+                            <Paper
+                                variant="outlined"
+                                component="form"
+                                sx={{
+                                    p: '2px 4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    maxWidth: 230,
+                                }}
+                            >
+                                <IconButton
+                                    onClick={() =>
+                                        props.handleQtyChange({ id: 'add' })
+                                    }
+                                    sx={{ p: '10px' }}
+                                    aria-label="directions"
+                                >
+                                    <AddIcon />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() =>
+                                        props.handleQtyChange({
+                                            id: 'subtract',
+                                        })
+                                    }
+                                    sx={{ p: '10px' }}
+                                    aria-label="directions"
+                                >
+                                    <RemoveIcon />
+                                </IconButton>
+                                <Divider
+                                    sx={{ height: 28, m: 0.5 }}
+                                    orientation="vertical"
+                                />
+                                <InputBase
+                                    readOnly
+                                    value={`الكمية (${props.orderModal.qty})`}
+                                    sx={{ ml: 1, flex: 1 }}
+                                />
+                                <ProductionQuantityLimitsIcon
+                                    color={'action'}
+                                    sx={{ p: '10px' }}
+                                />
+                            </Paper>
+                            {/* <IconButton sx={{ p: '10px' }}>
+                                <AddIcon />
+                            </IconButton>
+                            <IconButton sx={{ p: '10px' }}>
+                                <RemoveIcon />
+                            </IconButton>
                             <TextField
                                 onChange={(e) =>
                                     props.handleQtyChange(e.target.value)
@@ -55,7 +129,7 @@ export default function OrderModal(props) {
                                 fullWidth
                                 type="number"
                                 variant="filled"
-                            />
+                            /> */}
                         </Grid>
                     </Grid>
                     {props.orderModal.listItem?.preferences.length !== 0 && (

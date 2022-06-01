@@ -238,7 +238,7 @@ export const addToCart = () => {
         const qty = orderModalState.qty
         const listItem = orderModalState.listItem
         // const preferences = orderModalState.listItem.preferences.slice()
-        cart.push({
+        cart.unshift({
             qty,
             forName,
             listItem,
@@ -375,5 +375,17 @@ export const submit = (storeID) => {
                 })
             )
         }
+    }
+}
+
+export const handleCartQtyChange = ({ id, index }) => {
+    return (dispatch, getState) => {
+        let cart = getState().home_page_reducer.cart.slice()
+        if (id === 'add') {
+            cart[index].qty = cart[index].qty + 1
+        } else if (cart[index].qty > 1) {
+            cart[index].qty = cart[index].qty - 1
+        }
+        dispatch({ type: 'home_page-cart', data: cart })
     }
 }

@@ -11,7 +11,7 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 const getTotal = (props) => {
     let sum = 0
     props.cart.forEach((item) => {
-        sum += item.listItem.Price
+        sum += item.listItem.Price * item.qty
         item.listItem.preferences.forEach((pref) => {
             sum += pref.choice.Price
         })

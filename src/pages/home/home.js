@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import MenuSection from './menuSection/menuSection'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions/home'
@@ -11,7 +12,18 @@ import { useParams } from 'react-router-dom'
 import OrderModal from './orderModal/orderModal'
 import CartSection from './cartSection/cartSection'
 import SubmitModal from './submitModal/submitModal'
-
+import StoreMallDirectoryOutlinedIcon from '@mui/icons-material/StoreMallDirectoryOutlined'
+import AppBar from '@mui/material/AppBar'
+import { styled } from '@mui/material/styles'
+import Badge from '@mui/material/Badge'
+const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+        right: -3,
+        top: 13,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+    },
+}))
 const Home = (props) => {
     let { storeID } = useParams()
     useEffect(() => {
@@ -51,10 +63,14 @@ const Home = (props) => {
     const handleForNameChange = (value) => {
         props.dispatch(actions.orderModal({ forName: value }))
     }
-    const handleQtyChange = (value) => {
-        if (/^[1-9]+[0-9]*$/.test(value)) {
-            props.dispatch(actions.orderModal({ qty: value }))
+    const handleQtyChange = ({ id }) => {
+        let qty = props.orderModal.qty
+        if (id === 'add') {
+            qty = qty + 1
+        } else if (qty !== 1) {
+            qty = qty - 1
         }
+        props.dispatch(actions.orderModal({ qty }))
     }
     const addToCart = () => {
         props.dispatch(actions.addToCart())
@@ -72,8 +88,38 @@ const Home = (props) => {
     const submit = () => {
         props.dispatch(actions.submit(storeID))
     }
+
+    const handleCartQtyChange = ({ id, index }) => {
+        props.dispatch(actions.handleCartQtyChange({ id, index }))
+    }
     return (
-        <Box sx={{ width: '100%', marginTop: '0.5rem' }}>
+        <Box sx={{ width: '100%' }}>
+            <AppBar
+                position="static"
+                variant={'outlined'}
+                elevation={0}
+                color={'default'}
+            >
+                <Typography
+                    variant="h5"
+                    component="div"
+                    py={1}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        color: 'inherit',
+                        textDecoration: 'none',
+                    }}
+                >
+                    <StoreMallDirectoryOutlinedIcon
+                        sx={{ fontSize: 'inherit' }}
+                    />
+                    &nbsp;
+                    {props.data?.Name}
+                </Typography>
+            </AppBar>
             <SubmitModal
                 submit={submit}
                 handleSubmitModalInputChange={handleSubmitModalInputChange}
@@ -96,7 +142,16 @@ const Home = (props) => {
                     aria-label="icon tabs example"
                 >
                     <Tab icon={<FormatListBulletedIcon />} />
-                    <Tab icon={<ShoppingCartIcon />} />
+                    <Tab
+                        icon={
+                            <StyledBadge
+                                badgeContent={props.cart.length}
+                                color="secondary"
+                            >
+                                <ShoppingCartIcon />
+                            </StyledBadge>
+                        }
+                    />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -113,6 +168,7 @@ const Home = (props) => {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <CartSection
+                    handleCartQtyChange={handleCartQtyChange}
                     handleToggleSubmitModal={handleToggleSubmitModal}
                     handleRemoveProduct={handleRemoveProduct}
                     cart={props.cart}

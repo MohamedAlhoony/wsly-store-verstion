@@ -167,6 +167,7 @@ const Layout = (props) => {
                     </Toolbar>
                 </Container>
             </AppBar>
+
             <Outlet />
         </Container>
     )

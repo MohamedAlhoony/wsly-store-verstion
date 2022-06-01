@@ -10,6 +10,7 @@ import {
     Typography,
 } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import PaidIcon from '@mui/icons-material/Paid'
 const getQuentity = (id, cart) => {
     let qtySum = 0
     cart.slice().forEach((item) => {
@@ -38,16 +39,30 @@ const getCard = (item, handleItemListClick, cart) => {
                 <CardHeader
                     title={item.Name}
                     subheader={[
-                        <span key={0}>السعر: {item.Price} دينار ليبي</span>,
-                        <br key={1} />,
-                        <span key={2}>{getQuentity(item.Id, cart)}</span>,
+                        <span key={0}>{getQuentity(item.Id, cart)}</span>,
                     ]}
                 />
                 <CardContent></CardContent>
-                <CardActions>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
                     <IconButton onClick={() => handleItemListClick(item)}>
                         <AddShoppingCartIcon color={'primary'} />
                     </IconButton>
+                    <Typography
+                        component="span"
+                        sx={{
+                            p: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 700,
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        &nbsp;
+                        {item.Price}
+                        &nbsp; دينار
+                    </Typography>
                 </CardActions>
             </Card>
         </Box>
