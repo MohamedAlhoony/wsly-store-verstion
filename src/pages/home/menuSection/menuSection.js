@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import TopForm from './topFrom/topForm'
 const MenuSection = (props) => {
     return (
-        <Box px={1}>
+        <Box>
             <TopForm {...props} />
             <ProductsItems {...props} />
         </Box>

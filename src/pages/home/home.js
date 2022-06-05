@@ -115,7 +115,7 @@ const Home = (props) => {
         )
     }
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box>
             <AppBar
                 position="static"
                 variant={'outlined'}
@@ -184,25 +184,29 @@ const Home = (props) => {
                 onChangeIndex={handleChangeIndex}
             >
                 <TabPanel value={value} index={0} dir={theme.direction}>
-                    <MenuSection
-                        cart={props.cart}
-                        handleItemListClick={handleItemListClick}
-                        listItems={props.listItems}
-                        categoryInputValue={props.categoryInputValue}
-                        handleCategoryInputValueChange={
-                            handleCategoryInputValueChange
-                        }
-                        categories={props.categories ?? []}
-                    />
+                    <Box p={1}>
+                        <MenuSection
+                            cart={props.cart}
+                            handleItemListClick={handleItemListClick}
+                            listItems={props.listItems}
+                            categoryInputValue={props.categoryInputValue}
+                            handleCategoryInputValueChange={
+                                handleCategoryInputValueChange
+                            }
+                            categories={props.categories ?? []}
+                        />
+                    </Box>
                 </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                    <CartSection
-                        handleCartQtyChange={handleCartQtyChange}
-                        handleToggleSubmitModal={handleToggleSubmitModal}
-                        handleRemoveProduct={handleRemoveProduct}
-                        cart={props.cart}
-                    />
-                </TabPanel>
+                <Box p={1}>
+                    <TabPanel value={value} index={1} dir={theme.direction}>
+                        <CartSection
+                            handleCartQtyChange={handleCartQtyChange}
+                            handleToggleSubmitModal={handleToggleSubmitModal}
+                            handleRemoveProduct={handleRemoveProduct}
+                            cart={props.cart}
+                        />
+                    </TabPanel>
+                </Box>
             </SwipeableViews>
         </Box>
     )
