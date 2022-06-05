@@ -18,7 +18,7 @@ const getPreferences = (props) => {
                         onChange={(e) =>
                             props.handlePrefChange(e.target.value, key)
                         }
-                        value={pref.choiceValue}
+                        value={pref.choiceValue.Id}
                         aria-labelledby="demo-radio-buttons-group-label"
                         name="radio-buttons-group"
                     >

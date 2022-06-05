@@ -1,108 +1,6 @@
 import { base_url } from '../../config'
 const normalizeData = (data) => {
     let categories = data.categories.slice()
-    // categories = [
-    //     {
-    //         Id: 1,
-    //         Name: 'سندوتشات',
-    //         items: [
-    //             {
-    //                 Id: 1,
-    //                 Name: 'شيش طاووق',
-    //                 Price: 10,
-    //                 preferences: [
-    //                     {
-    //                         id: 1,
-    //                         name: 'هريسة',
-    //                         choice: null,
-    //                         choices: [
-    //                             {
-    //                                 Id: 1,
-    //                                 Name: 'بدون هريسة',
-    //                                 Price: 0,
-    //                             },
-    //                             {
-    //                                 Id: 2,
-    //                                 Name: 'مع هريسة',
-    //                                 Price: 0,
-    //                             },
-    //                         ],
-    //                     },
-    //                     {
-    //                         id: 1,
-    //                         name: 'هريسة',
-    //                         choice: null,
-    //                         choices: [
-    //                             {
-    //                                 Id: 1,
-    //                                 Name: 'بدون هريسة',
-    //                                 Price: 0,
-    //                             },
-    //                             {
-    //                                 Id: 2,
-    //                                 Name: 'مع هريسة',
-    //                                 Price: 0,
-    //                             },
-    //                         ],
-    //                     },
-    //                     {
-    //                         id: 1,
-    //                         name: 'هريسة',
-    //                         choice: null,
-    //                         choices: [
-    //                             {
-    //                                 Id: 1,
-    //                                 Name: 'بدون هريسة',
-    //                                 Price: 0,
-    //                             },
-    //                             {
-    //                                 Id: 2,
-    //                                 Name: 'مع هريسة',
-    //                                 Price: 0,
-    //                             },
-    //                         ],
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         Id: 2,
-    //         Name: 'وجبات',
-    //         items: [
-    //             {
-    //                 Id: 2,
-    //                 Name: 'وجبة كباب',
-    //                 Price: 20,
-    //                 preferences: [
-    //                     {
-    //                         id: 2,
-    //                         name: 'الصوص',
-    //                         choice: null,
-    //                         choices: [
-    //                             {
-    //                                 Id: 1,
-    //                                 Name: 'ساموراي',
-    //                                 Price: 5,
-    //                             },
-    //                             {
-    //                                 Id: 2,
-    //                                 Name: 'ثومية',
-    //                                 Price: 5,
-    //                             },
-    //                         ],
-    //                     },
-    //                 ],
-    //             },
-    //             {
-    //                 Id: 3,
-    //                 Name: 'وجبة مشكل',
-    //                 Price: 20,
-    //                 preferences: [],
-    //             },
-    //         ],
-    //     },
-    // ]
     let allItems = []
     categories.forEach((category) => {
         allItems = allItems.concat(category.items)
@@ -211,7 +109,7 @@ export const snackBar = (value) => {
 export const handleItemListClick = (item) => {
     return (dispatch) => {
         item.preferences.forEach((pref) => {
-            pref.choiceValue = pref.choice.Id
+            pref.choiceValue = pref.choice
         })
         dispatch(orderModal({ show: true, listItem: item }))
     }
@@ -220,16 +118,14 @@ export const handlePrefChange = (value, index) => {
     return (dispatch, getState) => {
         let listItem = getState().home_page_reducer.orderModal.listItem
         let preferences = listItem.preferences.slice()
-        preferences[index].choiceValue = Number.parseInt(value)
+        preferences[index].choiceValue = preferences[index].choices.find(
+            (item) => Number.parseInt(value) === item.Id
+        )
         listItem.preferences = preferences
         dispatch(orderModal({ listItem }))
     }
 }
-// :[{"For":"abdo" , "Qty":2 , "item":{"id":1,"clientPreferences":[{"preferenceID":1,"ChoiceID":2},
 
-//     {"preferenceID":2,"ChoiceID":6}
-
-//     ]}}]
 export const addToCart = () => {
     return (dispatch, getState) => {
         const orderModalState = getState().home_page_reducer.orderModal
@@ -237,20 +133,24 @@ export const addToCart = () => {
         const forName = orderModalState.forName
         const qty = orderModalState.qty
         const listItem = orderModalState.listItem
-        // const preferences = orderModalState.listItem.preferences.slice()
         cart.unshift({
             qty,
             forName,
             listItem,
-            // name: listItem.Name,
-            // price: listItem.Price,
-            // item: {
-            //     id: listItem.Id,
-            //     clientPreferences: preferences.map((pref) => {
-            //         return { preferenceID: pref.id, ChoiceID: pref.choice.Id }
-            //     }),
-            // },
         })
+        if (forName !== '') {
+            let forNameOptions =
+                getState().home_page_reducer.forNameOptions.slice()
+            forNameOptions = forNameOptions.filter((item) => {
+                return item.forName !== forName
+            })
+            forNameOptions.unshift({
+                forName,
+                listItem,
+                qty,
+            })
+            dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
+        }
         dispatch({ type: 'home_page-cart', data: cart })
         dispatch(orderModal({ show: false, qty: 1, forName: '' }))
         dispatch(

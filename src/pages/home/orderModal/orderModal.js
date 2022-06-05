@@ -14,6 +14,9 @@ import Divider from '@mui/material/Divider'
 import PersonIcon from '@mui/icons-material/Person'
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits'
 import Preferences from './preferences/preferences'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
+import styles from './styles.module.scss'
 export default function OrderModal(props) {
     return (
         <div>
@@ -43,7 +46,38 @@ export default function OrderModal(props) {
                                     alignItems: 'center',
                                 }}
                             >
-                                <InputBase
+                                <Autocomplete
+                                    onChange={(e, value) => {
+                                        props.forNameAutocompleteChange(value)
+                                    }}
+                                    fullWidth
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={props.forNameOptions.map(
+                                        (item) => {
+                                            return {
+                                                ...item,
+                                                label: item.forName,
+                                            }
+                                        }
+                                    )}
+                                    renderInput={(params) => (
+                                        <div ref={params.InputProps.ref}>
+                                            <input
+                                                {...params.inputProps}
+                                                onChange={(e) =>
+                                                    props.handleForNameChange(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                value={props.orderModal.forName}
+                                                placeholder="الاسم"
+                                                className={styles.forNameInput}
+                                            />
+                                        </div>
+                                    )}
+                                />
+                                {/* <InputBase
                                     onChange={(e) =>
                                         props.handleForNameChange(
                                             e.target.value
@@ -52,22 +86,12 @@ export default function OrderModal(props) {
                                     value={props.orderModal.forName}
                                     sx={{ ml: 1, flex: 1 }}
                                     placeholder="الاسم"
-                                />
+                                /> */}
                                 <PersonIcon
                                     color={'action'}
                                     sx={{ p: '10px' }}
                                 />
                             </Paper>
-                            {/* <TextField
-                                onChange={(e) =>
-                                    props.handleForNameChange(e.target.value)
-                                }
-                                value={props.orderModal.forName}
-                                label="الاسم"
-                                fullWidth
-                                type="text"
-                                variant="filled"
-                            /> */}
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Paper

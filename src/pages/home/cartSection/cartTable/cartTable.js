@@ -48,7 +48,7 @@ const getPreferences = (item) => {
     let preferences = ''
     item.listItem.preferences.forEach((pref, index) => {
         preferences +=
-            pref.choice.Name +
+            pref.choiceValue.Name +
             (item.listItem.preferences.length - 1 !== index ? ' ,' : '')
     })
     return preferences

@@ -5,6 +5,7 @@ let defaultState = {
     categoryInputValue: '',
     listItems: [],
     filter: '',
+    forNameOptions: [],
     orderModal: {
         show: false,
         listItem: null,
@@ -33,6 +34,11 @@ const home_page_reducer = (state = defaultState, action) => {
                 ...state,
                 isLoading: action.data,
             }
+        case 'home_page-forNameOptions':
+            return {
+                ...state,
+                forNameOptions: action.data,
+            }
         case 'home_page-cart':
             return {
                 ...state,
@@ -41,7 +47,24 @@ const home_page_reducer = (state = defaultState, action) => {
         case 'home_page-orderModal':
             return {
                 ...state,
-                orderModal: action.data,
+                orderModal: {
+                    ...action.data,
+                    listItem: {
+                        ...action.data.listItem,
+                        preferences: action.data.listItem.preferences.map(
+                            (pref) => {
+                                return {
+                                    ...pref,
+                                    choices: pref.choices.map((choice) => {
+                                        return { ...choice }
+                                    }),
+                                    choiceValue: { ...pref.choiceValue },
+                                    choice: { ...pref.choice },
+                                }
+                            }
+                        ),
+                    },
+                },
             }
         case 'home_page-filter':
             return {

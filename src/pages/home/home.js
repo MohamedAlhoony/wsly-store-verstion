@@ -100,6 +100,14 @@ const Home = (props) => {
         })
         return cartQty
     }
+    const forNameAutocompleteChange = (value) => {
+        props.dispatch(
+            actions.orderModal({
+                forName: value.forName,
+                listItem: value.listItem,
+            })
+        )
+    }
     return (
         <Box sx={{ width: '100%' }}>
             <AppBar
@@ -135,6 +143,8 @@ const Home = (props) => {
                 submitModal={props.submitModal}
             />
             <OrderModal
+                forNameAutocompleteChange={forNameAutocompleteChange}
+                forNameOptions={props.forNameOptions}
                 addToCart={addToCart}
                 handleQtyChange={handleQtyChange}
                 handleForNameChange={handleForNameChange}
@@ -199,5 +209,6 @@ export default connect(({ home_page_reducer }, props) => {
         orderModal: home_page_reducer.orderModal,
         submitModal: home_page_reducer.submitModal,
         cart: home_page_reducer.cart,
+        forNameOptions: home_page_reducer.forNameOptions,
     }
 })(Home)
