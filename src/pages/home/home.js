@@ -16,6 +16,8 @@ import StoreMallDirectoryOutlinedIcon from '@mui/icons-material/StoreMallDirecto
 import AppBar from '@mui/material/AppBar'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
+import SwipeableViews from 'react-swipeable-views'
+import { useTheme } from '@mui/material/styles'
 export const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
         right: -3,
@@ -30,9 +32,13 @@ const Home = (props) => {
     useEffect(() => {
         props.dispatch(actions.makeRequests(storeID))
     }, [])
+    const theme = useTheme()
     const [value, setValue] = useState(0)
     const handleChange = (event, newValue) => {
         setValue(newValue)
+    }
+    const handleChangeIndex = (index) => {
+        setValue(index)
     }
     function TabPanel(props) {
         const { children, value, index, id, ...other } = props
@@ -172,26 +178,32 @@ const Home = (props) => {
                     />
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
-                <MenuSection
-                    cart={props.cart}
-                    handleItemListClick={handleItemListClick}
-                    listItems={props.listItems}
-                    categoryInputValue={props.categoryInputValue}
-                    handleCategoryInputValueChange={
-                        handleCategoryInputValueChange
-                    }
-                    categories={props.categories ?? []}
-                />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <CartSection
-                    handleCartQtyChange={handleCartQtyChange}
-                    handleToggleSubmitModal={handleToggleSubmitModal}
-                    handleRemoveProduct={handleRemoveProduct}
-                    cart={props.cart}
-                />
-            </TabPanel>
+            <SwipeableViews
+                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                index={value}
+                onChangeIndex={handleChangeIndex}
+            >
+                <TabPanel value={value} index={0} dir={theme.direction}>
+                    <MenuSection
+                        cart={props.cart}
+                        handleItemListClick={handleItemListClick}
+                        listItems={props.listItems}
+                        categoryInputValue={props.categoryInputValue}
+                        handleCategoryInputValueChange={
+                            handleCategoryInputValueChange
+                        }
+                        categories={props.categories ?? []}
+                    />
+                </TabPanel>
+                <TabPanel value={value} index={1} dir={theme.direction}>
+                    <CartSection
+                        handleCartQtyChange={handleCartQtyChange}
+                        handleToggleSubmitModal={handleToggleSubmitModal}
+                        handleRemoveProduct={handleRemoveProduct}
+                        cart={props.cart}
+                    />
+                </TabPanel>
+            </SwipeableViews>
         </Box>
     )
 }

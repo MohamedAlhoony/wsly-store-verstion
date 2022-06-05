@@ -20,65 +20,69 @@ const getTotal = (props) => {
 }
 const CartSection = (props) => {
     return (
-        <Grid container spacing={1} justifyContent={'space-between'}>
-            <Grid item xs={12} sm={'auto'}>
-                <Typography
-                    component={'div'}
-                    mb={3}
-                    variant={'h4'}
-                    display={'flex'}
-                    alignItems={'center'}
-                >
-                    <ShoppingCartIcon sx={{ fontSize: 'inherit' }} />
-                    المشتريات
-                </Typography>
-            </Grid>
-
-            {props.cart.length !== 0 ? (
-                <>
-                    <Grid item xs={12}>
-                        <Typography
-                            component={'div'}
-                            variant={'h5'}
-                            display={'flex'}
-                            alignItems={'center'}
-                        >
-                            <PaidIcon sx={{ fontSize: 'inherit' }} />
-                            الإجمالي:
-                            <strong style={{ color: 'green' }}>
-                                &nbsp;{getTotal(props)}&nbsp;
-                            </strong>
-                            دينار ليبي
-                        </Typography>
-                    </Grid>
-                    <Grid
-                        justifyContent={'flex-end'}
+        <Box p={1}>
+            <Grid container spacing={1} justifyContent={'space-between'}>
+                <Grid item xs={12} sm={'auto'}>
+                    <Typography
+                        component={'div'}
+                        mb={3}
+                        variant={'h4'}
                         display={'flex'}
-                        item
-                        xs={12}
+                        alignItems={'center'}
                     >
-                        <Button
-                            onClick={props.handleToggleSubmitModal}
-                            endIcon={<ShoppingCartCheckoutIcon />}
-                            size={'large'}
-                            variant="contained"
-                        >
-                            اتمام الطلب
-                        </Button>
-                    </Grid>
-                </>
-            ) : (
-                ''
-            )}
+                        <ShoppingCartIcon sx={{ fontSize: 'inherit' }} />
+                        المشتريات
+                    </Typography>
+                </Grid>
 
-            <Grid item xs={12}>
                 {props.cart.length !== 0 ? (
-                    <CartTable {...props} />
+                    <>
+                        <Grid item xs={12}>
+                            <Typography
+                                component={'div'}
+                                variant={'h5'}
+                                display={'flex'}
+                                alignItems={'center'}
+                            >
+                                <PaidIcon sx={{ fontSize: 'inherit' }} />
+                                الإجمالي:
+                                <strong style={{ color: 'green' }}>
+                                    &nbsp;{getTotal(props)}&nbsp;
+                                </strong>
+                                دينار ليبي
+                            </Typography>
+                        </Grid>
+                        <Grid
+                            justifyContent={'flex-end'}
+                            display={'flex'}
+                            item
+                            xs={12}
+                        >
+                            <Button
+                                onClick={props.handleToggleSubmitModal}
+                                endIcon={<ShoppingCartCheckoutIcon />}
+                                size={'large'}
+                                variant="contained"
+                            >
+                                اتمام الطلب
+                            </Button>
+                        </Grid>
+                    </>
                 ) : (
-                    <Alert severity="info">السلة فارغة قم بإضافة مشتريات</Alert>
+                    ''
                 )}
+
+                <Grid item xs={12}>
+                    {props.cart.length !== 0 ? (
+                        <CartTable {...props} />
+                    ) : (
+                        <Alert severity="info">
+                            السلة فارغة قم بإضافة مشتريات
+                        </Alert>
+                    )}
+                </Grid>
             </Grid>
-        </Grid>
+        </Box>
     )
 }
 
