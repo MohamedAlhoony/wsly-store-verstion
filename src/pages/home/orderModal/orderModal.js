@@ -53,14 +53,18 @@ export default function OrderModal(props) {
                                     fullWidth
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={props.forNameOptions.map(
-                                        (item) => {
+                                    options={props.forNameOptions
+                                        .filter(
+                                            (item) =>
+                                                item.listItem.Name ===
+                                                props.orderModal.listItem?.Name
+                                        )
+                                        .map((item) => {
                                             return {
                                                 ...item,
                                                 label: item.forName,
                                             }
-                                        }
-                                    )}
+                                        })}
                                     renderInput={(params) => (
                                         <div ref={params.InputProps.ref}>
                                             <input

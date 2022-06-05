@@ -141,14 +141,20 @@ export const addToCart = () => {
         if (forName !== '') {
             let forNameOptions =
                 getState().home_page_reducer.forNameOptions.slice()
-            forNameOptions = forNameOptions.filter((item) => {
-                return item.forName !== forName
-            })
-            forNameOptions.unshift({
-                forName,
-                listItem,
-                qty,
-            })
+            let item = forNameOptions.find(
+                (item) =>
+                    item.listItem.Name === listItem.Name &&
+                    item.forName === forName
+            )
+            if (item) {
+                item.listItem = listItem
+            } else {
+                forNameOptions.unshift({
+                    forName,
+                    listItem,
+                    qty,
+                })
+            }
             dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
         }
         dispatch({ type: 'home_page-cart', data: cart })

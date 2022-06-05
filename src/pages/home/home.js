@@ -53,7 +53,7 @@ const Home = (props) => {
         props.dispatch(actions.handleCategoryInputValueChange(value))
     }
     const handleCloseOrderModal = () => {
-        props.dispatch(actions.orderModal({ show: false }))
+        props.dispatch(actions.orderModal({ show: false, qty: 1, forName: '' }))
     }
     const handleItemListClick = (item) => {
         props.dispatch(actions.handleItemListClick(item))
