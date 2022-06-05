@@ -75,7 +75,7 @@ const getCard = (item, handleItemListClick, cart) => {
 }
 
 const getItems = (props) => {
-    return props.listItems.map((listItem, key) => {
+    return props.filteredListItems.map((listItem, key) => {
         return (
             <Grid
                 xs={6}

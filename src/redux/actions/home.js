@@ -72,12 +72,18 @@ export const handleCategoryInputValueChange = (value) => {
         ).items
         dispatch({ type: 'home_page-categoryInputValue', data: value })
         dispatch(updateListItems(listItems))
+        dispatch(updateFilteredListItems(listItems))
     }
 }
 
 export const updateListItems = (value) => {
     return (dispatch) => {
         dispatch({ type: 'home_page-listItems', data: value })
+    }
+}
+export const updateFilteredListItems = (value) => {
+    return (dispatch) => {
+        dispatch({ type: 'home_page-filteredListItems', data: value })
     }
 }
 
@@ -133,11 +139,27 @@ export const addToCart = () => {
         const forName = orderModalState.forName
         const qty = orderModalState.qty
         const listItem = orderModalState.listItem
-        cart.unshift({
-            qty,
-            forName,
-            listItem,
+        let sameOrderIndex = cart.findIndex((item) => {
+            if (item.listItem.Id === listItem.Id && item.forName === forName) {
+                return item.listItem.preferences.every((pref, index) => {
+                    return (
+                        pref.choiceValue.Id ===
+                        listItem.preferences[index].choiceValue.Id
+                    )
+                })
+            } else {
+                return false
+            }
         })
+        if (sameOrderIndex !== -1) {
+            cart[sameOrderIndex].qty += qty
+        } else {
+            cart.unshift({
+                qty,
+                forName,
+                listItem,
+            })
+        }
         if (forName !== '') {
             let forNameOptions =
                 getState().home_page_reducer.forNameOptions.slice()
@@ -294,4 +316,8 @@ export const handleCartQtyChange = ({ id, index }) => {
         }
         dispatch({ type: 'home_page-cart', data: cart })
     }
+}
+
+export const handleFilterChange = (value) => {
+    return (dispatch, getState) => {}
 }

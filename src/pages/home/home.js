@@ -17,6 +17,7 @@ import AppBar from '@mui/material/AppBar'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
 import SwipeableViews from 'react-swipeable-views'
+import debounce from 'lodash.debounce'
 import { useTheme } from '@mui/material/styles'
 export const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -114,6 +115,12 @@ const Home = (props) => {
             })
         )
     }
+    const _handleFilterChange = debounce((value) => {
+        props.dispatch(actions.handleFilterChange(value))
+    }, 300)
+    const handleFilterChange = (value) => {
+        // props.dispatch({ type: 'home_page-filter', data: value })
+    }
     return (
         <Box>
             <AppBar
@@ -186,9 +193,11 @@ const Home = (props) => {
                 <TabPanel value={value} index={0} dir={theme.direction}>
                     <Box p={1}>
                         <MenuSection
+                            handleFilterChange={handleFilterChange}
+                            filter={props.filter}
                             cart={props.cart}
                             handleItemListClick={handleItemListClick}
-                            listItems={props.listItems}
+                            filteredListItems={props.filteredListItems}
                             categoryInputValue={props.categoryInputValue}
                             handleCategoryInputValueChange={
                                 handleCategoryInputValueChange
@@ -214,6 +223,7 @@ const Home = (props) => {
 
 export default connect(({ home_page_reducer }, props) => {
     return {
+        filter: home_page_reducer.filter,
         data: home_page_reducer.data,
         isLoading: home_page_reducer.isLoading,
         categories: home_page_reducer.data?.categories,
@@ -221,7 +231,7 @@ export default connect(({ home_page_reducer }, props) => {
         isAvailable: home_page_reducer.data?.IsAvailable,
         ID: home_page_reducer.data?.IsAvailable.ID,
         categoryInputValue: home_page_reducer.categoryInputValue,
-        listItems: home_page_reducer.listItems,
+        filteredListItems: home_page_reducer.filteredListItems,
         orderModal: home_page_reducer.orderModal,
         submitModal: home_page_reducer.submitModal,
         cart: home_page_reducer.cart,

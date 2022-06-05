@@ -42,7 +42,14 @@ const TopForm = (props) => {
                         sx={{ height: 28, m: 0.5 }}
                         orientation="vertical"
                     />
-                    <InputBase sx={{ ml: 1, flex: 1 }} placeholder="فلترة..." />
+                    <InputBase
+                        onChange={(e) => {
+                            props.handleFilterChange(e.target.value)
+                        }}
+                        value={props.filter}
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder="فلترة..."
+                    />
                     <FilterAltIcon color={'action'} sx={{ p: '10px' }} />
                 </Paper>
             </Grid>

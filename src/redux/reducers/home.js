@@ -4,6 +4,7 @@ let defaultState = {
     cart: [],
     categoryInputValue: '',
     listItems: [],
+    filteredListItems: [],
     filter: '',
     forNameOptions: [],
     orderModal: {
@@ -75,6 +76,11 @@ const home_page_reducer = (state = defaultState, action) => {
             return {
                 ...state,
                 listItems: action.data,
+            }
+        case 'home_page-filteredListItems':
+            return {
+                ...state,
+                filteredListItems: action.data,
             }
         case 'home_page-categoryInputValue':
             return {
