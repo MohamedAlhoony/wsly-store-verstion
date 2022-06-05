@@ -47,6 +47,7 @@ export default function OrderModal(props) {
                                 }}
                             >
                                 <Autocomplete
+                                    blurOnSelect={true}
                                     onChange={(e, value) => {
                                         props.forNameAutocompleteChange(value)
                                     }}
@@ -81,16 +82,7 @@ export default function OrderModal(props) {
                                         </div>
                                     )}
                                 />
-                                {/* <InputBase
-                                    onChange={(e) =>
-                                        props.handleForNameChange(
-                                            e.target.value
-                                        )
-                                    }
-                                    value={props.orderModal.forName}
-                                    sx={{ ml: 1, flex: 1 }}
-                                    placeholder="الاسم"
-                                /> */}
+
                                 <PersonIcon
                                     color={'action'}
                                     sx={{ p: '10px' }}
@@ -105,7 +97,7 @@ export default function OrderModal(props) {
                                     p: '2px 4px',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    maxWidth: 230,
+                                    maxWidth: 200,
                                 }}
                             >
                                 <IconButton
@@ -117,6 +109,20 @@ export default function OrderModal(props) {
                                 >
                                     <AddIcon />
                                 </IconButton>
+
+                                <Divider
+                                    sx={{ height: 28, m: 0.5 }}
+                                    orientation="vertical"
+                                />
+                                <InputBase
+                                    readOnly
+                                    value={`الكمية (${props.orderModal.qty})`}
+                                    sx={{ ml: 1, flex: 1 }}
+                                />
+                                <Divider
+                                    sx={{ height: 28, m: 0.5 }}
+                                    orientation="vertical"
+                                />
                                 <IconButton
                                     onClick={() =>
                                         props.handleQtyChange({
@@ -128,36 +134,11 @@ export default function OrderModal(props) {
                                 >
                                     <RemoveIcon />
                                 </IconButton>
-                                <Divider
-                                    sx={{ height: 28, m: 0.5 }}
-                                    orientation="vertical"
-                                />
-                                <InputBase
-                                    readOnly
-                                    value={`الكمية (${props.orderModal.qty})`}
-                                    sx={{ ml: 1, flex: 1 }}
-                                />
-                                <ProductionQuantityLimitsIcon
+                                {/* <ProductionQuantityLimitsIcon
                                     color={'action'}
                                     sx={{ p: '10px' }}
-                                />
+                                /> */}
                             </Paper>
-                            {/* <IconButton sx={{ p: '10px' }}>
-                                <AddIcon />
-                            </IconButton>
-                            <IconButton sx={{ p: '10px' }}>
-                                <RemoveIcon />
-                            </IconButton>
-                            <TextField
-                                onChange={(e) =>
-                                    props.handleQtyChange(e.target.value)
-                                }
-                                value={props.orderModal.qty}
-                                label="الكمية"
-                                fullWidth
-                                type="number"
-                                variant="filled"
-                            /> */}
                         </Grid>
                     </Grid>
                     {props.orderModal.listItem?.preferences.length !== 0 && (

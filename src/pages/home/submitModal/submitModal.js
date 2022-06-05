@@ -93,24 +93,20 @@ export default function SubmitModal(props) {
                                 />
                             </Grid>
                         </Grid>
-                        <Grid item xs={12} mt={5}>
-                            <Button
-                                disabled={
-                                    props.submitModal.telNo === '' ||
-                                    props.submitModal.clientName === ''
-                                }
-                                onClick={props.submit}
-                                endIcon={<ShoppingCartCheckoutIcon />}
-                                size={'large'}
-                                variant="contained"
-                            >
-                                طلب
-                            </Button>
-                        </Grid>
                     </>
                 )}
             </DialogContent>
             <DialogActions>
+                <Button
+                    disabled={
+                        props.submitModal.telNo === '' ||
+                        props.submitModal.clientName === ''
+                    }
+                    onClick={props.submit}
+                    endIcon={<ShoppingCartCheckoutIcon />}
+                >
+                    طلب
+                </Button>
                 <Button
                     disabled={props.submitModal.isLoading}
                     onClick={props.handleToggleSubmitModal}
