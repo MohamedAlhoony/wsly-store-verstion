@@ -5,7 +5,6 @@ let defaultState = {
     categoryInputValue: '',
     listItems: [],
     filteredListItems: [],
-    filter: '',
     forNameOptions: [],
     orderModal: {
         show: false,
@@ -19,10 +18,11 @@ let defaultState = {
         severity: 'success',
         closeDuration: 6000,
     },
+    filterValue: '',
     submitModal: {
         isLoading: false,
         show: false,
-        clientName: '',
+        clientName: 'ss',
         telNo: '',
         isDelivery: true,
     },
@@ -67,10 +67,10 @@ const home_page_reducer = (state = defaultState, action) => {
                     },
                 },
             }
-        case 'home_page-filter':
+        case 'home_page-filterValue':
             return {
                 ...state,
-                filter: action.data,
+                filterValue: action.data,
             }
         case 'home_page-listItems':
             return {

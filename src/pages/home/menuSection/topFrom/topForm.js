@@ -14,7 +14,6 @@ const TopForm = (props) => {
         <Grid justifyContent={'center'} container>
             <Grid item xs={12} md={6}>
                 <Paper
-                    component="form"
                     sx={{
                         p: '2px 4px',
                         display: 'flex',
@@ -43,10 +42,10 @@ const TopForm = (props) => {
                         orientation="vertical"
                     />
                     <InputBase
+                        value={props.filterValue}
                         onChange={(e) => {
                             props.handleFilterChange(e.target.value)
                         }}
-                        value={props.filter}
                         sx={{ ml: 1, flex: 1 }}
                         placeholder="فلترة..."
                     />

@@ -260,7 +260,7 @@ export const submit = (storeID) => {
                         clientPreferences: item.listItem.preferences.map(
                             (pref) => {
                                 return {
-                                    ChoiceID: pref.choice.Id,
+                                    ChoiceID: pref.choiceValue.Id,
                                     preferenceID: pref.id,
                                 }
                             }
@@ -319,5 +319,7 @@ export const handleCartQtyChange = ({ id, index }) => {
 }
 
 export const handleFilterChange = (value) => {
-    return (dispatch, getState) => {}
+    return (dispatch, getState) => {
+        console.log('test')
+    }
 }

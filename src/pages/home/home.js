@@ -27,7 +27,9 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
         padding: '0 4px',
     },
 }))
-
+const _handleFilterChange = debounce((value, props) => {
+    props.dispatch(actions.handleFilterChange(value))
+}, 300)
 const Home = (props) => {
     let { storeID } = useParams()
     useEffect(() => {
@@ -115,11 +117,10 @@ const Home = (props) => {
             })
         )
     }
-    const _handleFilterChange = debounce((value) => {
-        props.dispatch(actions.handleFilterChange(value))
-    }, 300)
+
     const handleFilterChange = (value) => {
-        // props.dispatch({ type: 'home_page-filter', data: value })
+        props.dispatch({ type: 'home_page-filterValue', data: value })
+        _handleFilterChange(value, props)
     }
     return (
         <Box>
@@ -155,6 +156,7 @@ const Home = (props) => {
                 handleToggleSubmitModal={handleToggleSubmitModal}
                 submitModal={props.submitModal}
             />
+
             <OrderModal
                 forNameAutocompleteChange={forNameAutocompleteChange}
                 forNameOptions={props.forNameOptions}
@@ -190,31 +192,31 @@ const Home = (props) => {
                 index={value}
                 onChangeIndex={handleChangeIndex}
             >
-                <TabPanel value={value} index={0} dir={theme.direction}>
-                    <Box p={1}>
-                        <MenuSection
-                            handleFilterChange={handleFilterChange}
-                            filter={props.filter}
-                            cart={props.cart}
-                            handleItemListClick={handleItemListClick}
-                            filteredListItems={props.filteredListItems}
-                            categoryInputValue={props.categoryInputValue}
-                            handleCategoryInputValueChange={
-                                handleCategoryInputValueChange
-                            }
-                            categories={props.categories ?? []}
-                        />
-                    </Box>
-                </TabPanel>
-                <Box p={1}>
-                    <TabPanel value={value} index={1} dir={theme.direction}>
-                        <CartSection
-                            handleCartQtyChange={handleCartQtyChange}
-                            handleToggleSubmitModal={handleToggleSubmitModal}
-                            handleRemoveProduct={handleRemoveProduct}
-                            cart={props.cart}
-                        />
-                    </TabPanel>
+                {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
+                <Box p={1} dir={theme.direction}>
+                    <MenuSection
+                        handleFilterChange={handleFilterChange}
+                        filterValue={props.filterValue}
+                        cart={props.cart}
+                        handleItemListClick={handleItemListClick}
+                        filteredListItems={props.filteredListItems}
+                        categoryInputValue={props.categoryInputValue}
+                        handleCategoryInputValueChange={
+                            handleCategoryInputValueChange
+                        }
+                        categories={props.categories ?? []}
+                    />
+                </Box>
+                {/* </TabPanel> */}
+                <Box p={1} dir={theme.direction}>
+                    {/* <TabPanel value={value} index={1} dir={theme.direction}> */}
+                    <CartSection
+                        handleCartQtyChange={handleCartQtyChange}
+                        handleToggleSubmitModal={handleToggleSubmitModal}
+                        handleRemoveProduct={handleRemoveProduct}
+                        cart={props.cart}
+                    />
+                    {/* </TabPanel> */}
                 </Box>
             </SwipeableViews>
         </Box>
@@ -223,7 +225,6 @@ const Home = (props) => {
 
 export default connect(({ home_page_reducer }, props) => {
     return {
-        filter: home_page_reducer.filter,
         data: home_page_reducer.data,
         isLoading: home_page_reducer.isLoading,
         categories: home_page_reducer.data?.categories,
@@ -236,5 +237,6 @@ export default connect(({ home_page_reducer }, props) => {
         submitModal: home_page_reducer.submitModal,
         cart: home_page_reducer.cart,
         forNameOptions: home_page_reducer.forNameOptions,
+        filterValue: home_page_reducer.filterValue,
     }
 })(Home)
