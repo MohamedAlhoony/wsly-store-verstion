@@ -184,6 +184,8 @@ export const addToCart = () => {
                 )
                 if (productIndex !== -1) {
                     forNameOptions[itemIndex].items[productIndex] = listItem
+                } else {
+                    forNameOptions[itemIndex].items.push(listItem)
                 }
             } else {
                 forNameOptions.unshift({ forName, items: [listItem] })
