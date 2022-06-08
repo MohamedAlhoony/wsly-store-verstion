@@ -130,10 +130,6 @@ export default function OrderModal(props) {
                                 >
                                     <RemoveIcon />
                                 </IconButton>
-                                {/* <ProductionQuantityLimitsIcon
-                                    color={'action'}
-                                    sx={{ p: '10px' }}
-                                /> */}
                             </Paper>
                         </Grid>
                     </Grid>

@@ -73,6 +73,7 @@ export const handleCategoryInputValueChange = (value) => {
         dispatch({ type: 'home_page-categoryInputValue', data: value })
         dispatch(updateListItems(listItems))
         dispatch(updateFilteredListItems(listItems))
+        dispatch(handleFilterChange())
     }
 }
 
@@ -100,6 +101,17 @@ export const submitModal = (value) => {
         dispatch({
             type: 'home_page-submitModal',
             data: { ...getState().home_page_reducer.submitModal, ...value },
+        })
+    }
+}
+export const confirmCodeModal = (value) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: 'home_page-confirmCodeModal',
+            data: {
+                ...getState().home_page_reducer.confirmCodeModal,
+                ...value,
+            },
         })
     }
 }
@@ -163,19 +175,18 @@ export const addToCart = () => {
         if (forName !== '') {
             let forNameOptions =
                 getState().home_page_reducer.forNameOptions.slice()
-            let item = forNameOptions.find(
-                (item) =>
-                    item.listItem.Name === listItem.Name &&
-                    item.forName === forName
+            let itemIndex = forNameOptions.findIndex(
+                (item) => item.forName === forName
             )
-            if (item) {
-                item.listItem = listItem
+            if (itemIndex !== -1) {
+                let productIndex = forNameOptions[itemIndex].items.findIndex(
+                    (item) => item.Id === listItem.Id
+                )
+                if (productIndex !== -1) {
+                    forNameOptions[itemIndex].items[productIndex] = listItem
+                }
             } else {
-                forNameOptions.unshift({
-                    forName,
-                    listItem,
-                    qty,
-                })
+                forNameOptions.unshift({ forName, items: [listItem] })
             }
             dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
         }
@@ -268,7 +279,7 @@ export const submit = (storeID) => {
                     },
                 }
             })
-            await submitRequest({
+            const body = await submitRequest({
                 storeID,
                 telNo,
                 clientName,
@@ -289,6 +300,13 @@ export const submit = (storeID) => {
                     show: false,
                     clientName: '',
                     telNo: '',
+                })
+            )
+            dispatch(
+                confirmCodeModal({
+                    timer: Date.now() + 1000 * 60 * 2,
+                    orderId: body.OrderID,
+                    show: true,
                 })
             )
             dispatch({ type: 'home_page-cart', data: [] })
@@ -318,8 +336,176 @@ export const handleCartQtyChange = ({ id, index }) => {
     }
 }
 
-export const handleFilterChange = (value) => {
+export const handleFilterChange = () => {
     return (dispatch, getState) => {
-        console.log('test')
+        const listItems = getState().home_page_reducer.listItems
+        const filterValue = getState()
+            .home_page_reducer.filterValue.toLowerCase()
+            .trim()
+        const filteredListItems = listItems.filter(
+            (item) => item.Name.toLowerCase().indexOf(filterValue) !== -1
+        )
+        dispatch({
+            type: 'home_page-filteredListItems',
+            data: filteredListItems,
+        })
     }
+}
+
+export const handleConfirmCodeSubmit = () => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(
+                confirmCodeModal({
+                    isLoading: true,
+                })
+            )
+            const confirmCode =
+                getState().home_page_reducer.confirmCodeModal.confirmCode
+            const orderId =
+                getState().home_page_reducer.confirmCodeModal.orderId
+
+            await confirmCodeSubmitRequest({
+                confirmCode,
+                orderId,
+            })
+            dispatch(
+                snackBar({
+                    show: true,
+                    closeDuration: 4000,
+                    severity: 'success',
+                    message: 'تمت عملية التأكيد بنجاح',
+                })
+            )
+            dispatch(
+                confirmCodeModal({
+                    isLoading: false,
+                    show: false,
+                    confirmCode: '',
+                })
+            )
+            dispatch({ type: 'home_page-cart', data: [] })
+        } catch (error) {
+            console.log(error)
+            dispatch(confirmCodeModal({ isLoading: false }))
+            dispatch(
+                snackBar({
+                    show: true,
+                    closeDuration: 4000,
+                    severity: 'error',
+                    message: 'فشلت عملية التأكيد',
+                })
+            )
+        }
+    }
+}
+
+const confirmCodeSubmitRequest = ({ confirmCode, orderId }) => {
+    return new Promise(async (resolve, reject) => {
+        var myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+        }
+        try {
+            var response = await fetch(
+                `${base_url}/D/ConfirmOrder?OrderID=${orderId}&ConfirmCode=${encodeURIComponent(
+                    confirmCode
+                )}`,
+                requestOptions
+            )
+            let body
+            try {
+                body = JSON.parse(await response.text())
+            } catch (err) {
+                body = ''
+            }
+            if (response.status >= 200 && response.status < 300) {
+                resolve(body)
+            } else {
+                reject()
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+export const resendConfirmationCode = () => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(
+                confirmCodeModal({
+                    isLoading: true,
+                })
+            )
+            const orderId =
+                getState().home_page_reducer.confirmCodeModal.orderId
+
+            await resendConfirmationCodeRequest({
+                orderId,
+            })
+            dispatch(
+                confirmCodeModal({
+                    timer: Date.now() + 1000 * 60 * 2,
+                })
+            )
+            dispatch(
+                snackBar({
+                    show: true,
+                    closeDuration: 4000,
+                    severity: 'success',
+                    message: 'تمت عملية إعادة الإرسال',
+                })
+            )
+            dispatch(
+                confirmCodeModal({
+                    isLoading: false,
+                    confirmCode: '',
+                })
+            )
+        } catch (error) {
+            dispatch(confirmCodeModal({ isLoading: false }))
+            dispatch(
+                snackBar({
+                    show: true,
+                    closeDuration: 4000,
+                    severity: 'error',
+                    message: 'فشلت عملية إعادة الإرسال',
+                })
+            )
+        }
+    }
+}
+
+const resendConfirmationCodeRequest = ({ orderId }) => {
+    return new Promise(async (resolve, reject) => {
+        var myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+        }
+        try {
+            var response = await fetch(
+                `${base_url}/D/ResendOTP?OrderID=${orderId}`,
+                requestOptions
+            )
+            let body
+            try {
+                body = JSON.parse(await response.text())
+            } catch (err) {
+                body = ''
+            }
+            if (response.status >= 200 && response.status < 300) {
+                resolve(body)
+            } else {
+                reject()
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
 }

@@ -18,7 +18,6 @@ import Box from '@mui/material/Box'
 export default function SubmitModal(props) {
     return (
         <Dialog
-            onBackdropClick={() => {}}
             dir="rtl"
             fullWidth
             maxWidth="md"

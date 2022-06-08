@@ -22,9 +22,16 @@ let defaultState = {
     submitModal: {
         isLoading: false,
         show: false,
-        clientName: 'ss',
+        clientName: '',
         telNo: '',
         isDelivery: true,
+    },
+    confirmCodeModal: {
+        timer: null,
+        isLoading: false,
+        show: false,
+        confirmCode: '',
+        orderId: '',
     },
 }
 
@@ -101,6 +108,11 @@ const home_page_reducer = (state = defaultState, action) => {
             return {
                 ...state,
                 submitModal: action.data,
+            }
+        case 'home_page-confirmCodeModal':
+            return {
+                ...state,
+                confirmCodeModal: action.data,
             }
         default:
             return {
