@@ -9,21 +9,27 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
+import Avatar from '@mui/material/Avatar'
+import Tooltip from '@mui/material/Tooltip'
+import Divider from '@mui/material/Divider'
+import LogoutIcon from '@mui/icons-material/Logout'
 import { Link, Outlet } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { snackBar } from '../redux/actions/home'
 import SnackBar from '../components/snackBar/snackBar'
+import { useNavigate } from 'react-router-dom'
 const pages = [
     { name: 'حول الشركة', to: 'https://umbrella.ly/about', isExternal: true },
     // { name: 'cart', to: '/cart', isExternal: false },
 ]
-
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 const Layout = (props) => {
+    const navigate = useNavigate()
     const closeSnackBar = () => {
         props.dispatch(snackBar({ show: false }))
     }
     const [anchorElNav, setAnchorElNav] = React.useState(null)
-
+    const [anchorElUser, setAnchorElUser] = React.useState(null)
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget)
     }
@@ -31,7 +37,12 @@ const Layout = (props) => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null)
     }
-
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget)
+    }
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null)
+    }
     return (
         <Container sx={{ px: 1 }}>
             <SnackBar closeSnackBar={closeSnackBar} snackBar={props.snackBar} />
@@ -163,6 +174,46 @@ const Layout = (props) => {
                                     </Button>
                                 </Typography>
                             ))}
+                        </Box>
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
+                                    <Avatar alt="Remy Sharp" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <MenuItem
+                                    onClick={() => {
+                                        navigate('/location')
+                                        handleCloseUserMenu()
+                                    }}
+                                >
+                                    مواقعي
+                                </MenuItem>
+                                <Divider />
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <LogoutIcon />
+                                    &nbsp;تسجيل خروج
+                                </MenuItem>
+                            </Menu>
                         </Box>
                     </Toolbar>
                 </Container>
