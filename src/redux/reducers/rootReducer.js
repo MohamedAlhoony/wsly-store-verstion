@@ -1,9 +1,13 @@
 import { combineReducers } from 'redux'
 import home_page_reducer from './home'
 import location_page_reducer from './location'
+import layout_reducer from './layout'
+import authorization_reducer from './authorization'
 const appReducer = combineReducers({
     home_page_reducer,
     location_page_reducer,
+    layout_reducer,
+    authorization_reducer,
 })
 const appReducer_middleware = (state, action) => {
     switch (action.type) {
@@ -15,6 +19,12 @@ const appReducer_middleware = (state, action) => {
             break
         case 'reset-location_page_reducer':
             state.location_page_reducer = undefined
+            break
+        case 'reset-layout_reducer':
+            state.layout_reducer = undefined
+            break
+        case 'reset-authorization_reducer':
+            state.authorization_reducer = undefined
             break
 
         default:

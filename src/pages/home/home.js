@@ -18,7 +18,7 @@ import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
 import SwipeableViews from 'react-swipeable-views'
 import debounce from 'lodash.debounce'
-import ConfirmCodeModal from './confirmCodeModal/confirmCodeModal'
+// import ConfirmCodeModal from './confirmCodeModal/confirmCodeModal'
 import { useTheme } from '@mui/material/styles'
 export const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -135,21 +135,21 @@ const Home = (props) => {
         _handleFilterChange(props)
     }
 
-    const handleToggleConfirmCodeModal = (event, reason) => {
-        if (reason && reason === 'backdropClick') return
-        props.dispatch(
-            actions.confirmCodeModal({ show: !props.confirmCodeModal.show })
-        )
-    }
-    const handleConfirmCodeModalInputChange = ({ id, value }) => {
-        props.dispatch(actions.confirmCodeModal({ [id]: value }))
-    }
-    const handleConfirmCodeSubmit = () => {
-        props.dispatch(actions.handleConfirmCodeSubmit())
-    }
-    const resendConfirmationCode = () => {
-        props.dispatch(actions.resendConfirmationCode())
-    }
+    // const handleToggleConfirmCodeModal = (event, reason) => {
+    //     if (reason && reason === 'backdropClick') return
+    //     props.dispatch(
+    //         actions.confirmCodeModal({ show: !props.confirmCodeModal.show })
+    //     )
+    // }
+    // const handleConfirmCodeModalInputChange = ({ id, value }) => {
+    //     props.dispatch(actions.confirmCodeModal({ [id]: value }))
+    // }
+    // const handleConfirmCodeSubmit = () => {
+    //     props.dispatch(actions.handleConfirmCodeSubmit())
+    // }
+    // const resendConfirmationCode = () => {
+    //     props.dispatch(actions.resendConfirmationCode())
+    // }
     return (
         <Box>
             <AppBar
@@ -195,7 +195,7 @@ const Home = (props) => {
                 handleCloseOrderModal={handleCloseOrderModal}
                 orderModal={props.orderModal}
             />
-            <ConfirmCodeModal
+            {/* <ConfirmCodeModal
                 resendConfirmationCode={resendConfirmationCode}
                 handleConfirmCodeSubmit={handleConfirmCodeSubmit}
                 handleConfirmCodeModalInputChange={
@@ -203,7 +203,7 @@ const Home = (props) => {
                 }
                 handleToggleConfirmCodeModal={handleToggleConfirmCodeModal}
                 confirmCodeModal={props.confirmCodeModal}
-            />
+            /> */}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs
                     centered
@@ -275,6 +275,6 @@ export default connect(({ home_page_reducer }, props) => {
         cart: home_page_reducer.cart,
         forNameOptions: home_page_reducer.forNameOptions,
         filterValue: home_page_reducer.filterValue,
-        confirmCodeModal: home_page_reducer.confirmCodeModal,
+        // confirmCodeModal: home_page_reducer.confirmCodeModal,
     }
 })(Home)

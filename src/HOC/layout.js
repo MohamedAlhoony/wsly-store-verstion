@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -17,14 +17,67 @@ import { Link, Outlet } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { snackBar } from '../redux/actions/home'
 import SnackBar from '../components/snackBar/snackBar'
+import { styled, alpha } from '@mui/material/styles'
+import * as actions from '../redux/actions/layout'
+import * as authActions from '../redux/actions/authorization'
+import SigninModal from '../components/signinModal/signinModal'
 import { useNavigate } from 'react-router-dom'
+import ConfirmCodeModal from '../components/confirmCodeModal/confirmCodeModal'
 const pages = [
     { name: 'حول الشركة', to: 'https://umbrella.ly/about', isExternal: true },
     // { name: 'cart', to: '/cart', isExternal: false },
 ]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+const StyledMenu = styled((props) => (
+    <Menu
+        elevation={0}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+        }}
+        {...props}
+    />
+))(({ theme }) => ({
+    '& .MuiPaper-root': {
+        borderRadius: 6,
+        // marginTop: theme.spacing(1),
+        minWidth: 180,
+        color:
+            theme.palette.mode === 'light'
+                ? 'rgb(55, 65, 81)'
+                : theme.palette.grey[300],
+        boxShadow:
+            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+        '& .MuiMenu-list': {
+            padding: '4px 0',
+        },
+        '& .MuiMenuItem-root': {
+            fontSize: 15,
+            '& .MuiSvgIcon-root': {
+                fontSize: 19,
+                color: theme.palette.secondary.main,
+                // marginRight: theme.spacing(1),
+            },
+            '&:active': {
+                backgroundColor: alpha(
+                    theme.palette.primary.main,
+                    theme.palette.action.selectedOpacity
+                ),
+            },
+        },
+    },
+}))
+
 const Layout = (props) => {
+    useEffect(() => {
+        props.dispatch(authActions.authCheck())
+    }, [])
     const navigate = useNavigate()
+
     const closeSnackBar = () => {
         props.dispatch(snackBar({ show: false }))
     }
@@ -43,9 +96,70 @@ const Layout = (props) => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null)
     }
+
+    const handleToggleSigninModal = (event, reason) => {
+        if (reason && reason === 'backdropClick') return
+        props.dispatch(actions.signinModal({ show: !props.signinModal.show }))
+    }
+    const handleSigninModalInputChange = ({ id, value }) => {
+        props.dispatch(
+            actions.signinModal({ [id]: value, [id + 'ErrorMsg']: '' })
+        )
+    }
+
+    const signin = () => {
+        try {
+            props.dispatch(authActions.handleSigninValidation())
+            props.dispatch(authActions.handleSignin())
+        } catch (err) {
+            const errors = JSON.parse(err.message)
+            errors.forEach((item) => {
+                props.dispatch(
+                    actions.signinModal({ [item.id]: item.errorMsg })
+                )
+            })
+        }
+    }
+    const handleLoginClick = () => {
+        props.dispatch(actions.signinModal({ show: true }))
+    }
+    const handleSignoutClick = () => {
+        props.dispatch(authActions.signout())
+    }
+
+    const handleToggleConfirmCodeModal = (event, reason) => {
+        if (reason && reason === 'backdropClick') return
+        props.dispatch(
+            actions.confirmCodeModal({ show: !props.confirmCodeModal.show })
+        )
+    }
+    const handleConfirmCodeModalInputChange = ({ id, value }) => {
+        props.dispatch(actions.confirmCodeModal({ [id]: value }))
+    }
+    const handleConfirmCodeSubmit = () => {
+        props.dispatch(authActions.verifyOTP_and_signin())
+    }
+    const resendConfirmationCode = () => {
+        props.dispatch(authActions.handleResendOTP())
+    }
     return (
         <Container sx={{ px: 1 }}>
             <SnackBar closeSnackBar={closeSnackBar} snackBar={props.snackBar} />
+            <SigninModal
+                signin={signin}
+                handleSigninModalInputChange={handleSigninModalInputChange}
+                signinModal={props.signinModal}
+                handleToggleSigninModal={handleToggleSigninModal}
+            />
+            <ConfirmCodeModal
+                resendConfirmationCode={resendConfirmationCode}
+                handleConfirmCodeSubmit={handleConfirmCodeSubmit}
+                handleConfirmCodeModalInputChange={
+                    handleConfirmCodeModalInputChange
+                }
+                handleToggleConfirmCodeModal={handleToggleConfirmCodeModal}
+                confirmCodeModal={props.confirmCodeModal}
+            />
             <AppBar position="static">
                 <Container>
                     <Toolbar disableGutters>
@@ -175,7 +289,7 @@ const Layout = (props) => {
                                 </Typography>
                             ))}
                         </Box>
-                        <Box sx={{ flexGrow: 0 }}>
+                        {/* <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton
                                     onClick={handleOpenUserMenu}
@@ -214,7 +328,80 @@ const Layout = (props) => {
                                     &nbsp;تسجيل خروج
                                 </MenuItem>
                             </Menu>
-                        </Box>
+                        </Box> */}
+                        {props.authChecked ? (
+                            props.loggedIn ? (
+                                <Box sx={{ flexGrow: 0 }}>
+                                    <Tooltip title="الخيارات">
+                                        <IconButton
+                                            onClick={handleOpenUserMenu}
+                                            sx={{ p: 0 }}
+                                        >
+                                            <Avatar
+                                                alt={props.currentUser?.name}
+                                                src="/static/images/avatar/2.jpg"
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <StyledMenu
+                                        id="demo-customized-menu"
+                                        MenuListProps={{
+                                            'aria-labelledby':
+                                                'demo-customized-button',
+                                        }}
+                                        sx={{ mt: '45px' }}
+                                        anchorEl={anchorElUser}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'left',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'left',
+                                        }}
+                                        open={Boolean(anchorElUser)}
+                                        onClose={handleCloseUserMenu}
+                                    >
+                                        {/* <MenuItem
+                                            onClick={() => {
+                                                handleCloseUserMenu()
+                                                handleTogglePersonalInfoModal()
+                                            }}
+                                            disableRipple
+                                        >
+                                            <InfoIcon />
+                                            &nbsp; معلوماتي
+                                        </MenuItem>
+                                        <MenuItem
+                                            disableRipple
+                                            onClick={handleCloseUserMenu}
+                                        >
+                                            <FormatListBulletedIcon />
+                                            &nbsp; طلباتي
+                                        </MenuItem>
+                                        <Divider /> */}
+                                        <MenuItem
+                                            disableRipple
+                                            onClick={() => {
+                                                handleSignoutClick()
+                                                handleCloseUserMenu()
+                                            }}
+                                        >
+                                            <LogoutIcon />
+                                            &nbsp; تسجيل خروج
+                                        </MenuItem>
+                                    </StyledMenu>
+                                </Box>
+                            ) : (
+                                <Button
+                                    onClick={handleLoginClick}
+                                    color="inherit"
+                                >
+                                    تسجيل دخول
+                                </Button>
+                            )
+                        ) : null}
                     </Toolbar>
                 </Container>
             </AppBar>
@@ -223,8 +410,14 @@ const Layout = (props) => {
         </Container>
     )
 }
-export default connect(({ home_page_reducer }) => {
-    return {
-        snackBar: home_page_reducer.snackBar,
+export default connect(
+    ({ home_page_reducer, layout_reducer, authorization_reducer }) => {
+        return {
+            snackBar: home_page_reducer.snackBar,
+            signinModal: layout_reducer.signinModal,
+            confirmCodeModal: layout_reducer.confirmCodeModal,
+            loggedIn: authorization_reducer.loggedIn,
+            authChecked: authorization_reducer.authChecked,
+        }
     }
-})(Layout)
+)(Layout)
