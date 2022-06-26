@@ -2,7 +2,7 @@ const initialState = {
     signinModal: {
         show: false,
         isLoading: false,
-        phoneNumber: '917603784',
+        phoneNumber: '',
         name: '',
         nameErrorMsg: '',
         phoneNumberErrorMsg: '',
