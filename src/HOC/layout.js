@@ -23,6 +23,9 @@ import * as authActions from '../redux/actions/authorization'
 import SigninModal from '../components/signinModal/signinModal'
 import { useNavigate } from 'react-router-dom'
 import ConfirmCodeModal from '../components/confirmCodeModal/confirmCodeModal'
+import LocationModal from '../components/locationModal/locationModal'
+import debounce from 'lodash.debounce'
+
 const pages = [
     { name: 'حول الشركة', to: 'https://umbrella.ly/about', isExternal: true },
     // { name: 'cart', to: '/cart', isExternal: false },
@@ -71,7 +74,13 @@ const StyledMenu = styled((props) => (
         },
     },
 }))
+const _updateMapCenter = debounce(({ lat, lng }, props) => {
+    props.dispatch(actions.locationModal({ center: { lat, lng } }))
+}, 300)
 
+const _updateMapZoom = debounce(({ zoom }, props) => {
+    props.dispatch(actions.locationModal({ zoom }))
+}, 300)
 const Layout = (props) => {
     useEffect(() => {
         props.dispatch(authActions.authCheck())
@@ -142,9 +151,39 @@ const Layout = (props) => {
     const resendConfirmationCode = () => {
         props.dispatch(authActions.handleResendOTP())
     }
+
+    const handleFindUserLocation = () => {
+        props.dispatch(actions.handleFindUserLocation())
+    }
+    const updateMapZoom = ({ zoom }) => {
+        _updateMapZoom({ zoom }, props)
+    }
+    const toggleLocationModal = () => {
+        props.dispatch(
+            actions.locationModal({ show: !props.locationModal.show })
+        )
+    }
+    const updateMapCenter = ({ lat, lng }) => {
+        _updateMapCenter({ lat, lng }, props)
+        props.dispatch(
+            actions.locationModal({ location: { lat, lng }, showGuide: false })
+        )
+    }
+    const handleLocationSubmit = () => {
+        props.dispatch(actions.handleLocationSubmit())
+    }
     return (
         <Container sx={{ px: 1 }}>
             <SnackBar closeSnackBar={closeSnackBar} snackBar={props.snackBar} />
+            <LocationModal
+                locations={props.currentUser?.Locations}
+                handleFindUserLocation={handleFindUserLocation}
+                handleLocationSubmit={handleLocationSubmit}
+                updateMapCenter={updateMapCenter}
+                updateMapZoom={updateMapZoom}
+                locationModal={props.locationModal}
+                toggleLocationModal={toggleLocationModal}
+            />
             <SigninModal
                 signin={signin}
                 handleSigninModalInputChange={handleSigninModalInputChange}
@@ -338,7 +377,10 @@ const Layout = (props) => {
                                             sx={{ p: 0 }}
                                         >
                                             <Avatar
-                                                alt={props.currentUser?.name}
+                                                alt={
+                                                    props.currentUser
+                                                        ?.ClientName
+                                                }
                                                 src="/static/images/avatar/2.jpg"
                                             />
                                         </IconButton>
@@ -418,6 +460,8 @@ export default connect(
             confirmCodeModal: layout_reducer.confirmCodeModal,
             loggedIn: authorization_reducer.loggedIn,
             authChecked: authorization_reducer.authChecked,
+            currentUser: authorization_reducer.currentUser,
+            locationModal: layout_reducer.locationModal,
         }
     }
 )(Layout)

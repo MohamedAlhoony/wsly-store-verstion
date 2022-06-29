@@ -16,6 +16,14 @@ const initialState = {
         tokenId: '',
         clientId: '',
     },
+    locationModal: {
+        show: false,
+        isLoading: false,
+        location: { lat: 32.8872, lng: 13.1913 },
+        center: { lat: 32.8872, lng: 13.1913 },
+        zoom: 12,
+        showGuide: true,
+    },
 }
 
 const layout_reducer = (state = initialState, action) => {
@@ -29,6 +37,11 @@ const layout_reducer = (state = initialState, action) => {
             return {
                 ...state,
                 confirmCodeModal: action.data,
+            }
+        case 'layout_reducer-locationModal':
+            return {
+                ...state,
+                locationModal: action.data,
             }
         default:
             return state

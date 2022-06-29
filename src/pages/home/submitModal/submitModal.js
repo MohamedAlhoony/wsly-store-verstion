@@ -15,6 +15,8 @@ import Checkbox from '@mui/material/Checkbox'
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
+import Map from './map'
+
 export default function SubmitModal(props) {
     return (
         <Dialog
@@ -40,37 +42,7 @@ export default function SubmitModal(props) {
                     </Grid>
                 ) : (
                     <>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    onChange={(e) =>
-                                        props.handleSubmitModalInputChange({
-                                            id: 'clientName',
-                                            value: e.target.value,
-                                        })
-                                    }
-                                    value={props.submitModal.clientName}
-                                    label="الاسم"
-                                    fullWidth
-                                    type="text"
-                                    variant="filled"
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    onChange={(e) =>
-                                        props.handleSubmitModalInputChange({
-                                            id: 'telNo',
-                                            value: e.target.value,
-                                        })
-                                    }
-                                    value={props.submitModal.telNo}
-                                    label="رقم الهاتف"
-                                    fullWidth
-                                    type="text"
-                                    variant="filled"
-                                />
-                            </Grid>
+                        <Grid container spacing={1}>
                             <Grid item xs={12} sm={6}>
                                 <FormControlLabel
                                     control={
@@ -91,6 +63,20 @@ export default function SubmitModal(props) {
                                     label="مع التوصيل"
                                 />
                             </Grid>
+                            {props.submitModal.isDelivery && (
+                                <Grid item xs={12}>
+                                    <Map
+                                        handleMarkerClick={
+                                            props.handleMarkerClick
+                                        }
+                                        handleAddLocation={
+                                            props.handleAddLocation
+                                        }
+                                        submitModal={props.submitModal}
+                                        locations={props.locations}
+                                    />
+                                </Grid>
+                            )}
                         </Grid>
                     </>
                 )}
@@ -98,8 +84,8 @@ export default function SubmitModal(props) {
             <DialogActions>
                 <Button
                     disabled={
-                        props.submitModal.telNo === '' ||
-                        props.submitModal.clientName === ''
+                        props.submitModal.isDelivery &&
+                        !props.submitModal.selectedLocation
                     }
                     onClick={props.submit}
                     endIcon={<ShoppingCartCheckoutIcon />}

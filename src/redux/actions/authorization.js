@@ -1,7 +1,7 @@
 import { base_url } from '../../config'
-
+import axios from 'axios'
 import { signinModal, confirmCodeModal } from './layout'
-import { snackBar } from './home'
+import { snackBar, makeRequests } from './home'
 
 // export const verifyOTP_and_signin = () => {
 //     return async (dispatch, getState) => {
@@ -171,7 +171,9 @@ const verifyOTP = ({ confirmCode, clientName, tokenId }) => {
         }
         try {
             var response = await fetch(
-                `${base_url}/D/ConfirmOTP?TokenID=${tokenId}&OTPValue=${confirmCode}&ClientName=${clientName}`,
+                `${base_url}/D/ConfirmOTP?TokenID=${tokenId}&OTPValue=${encodeURIComponent(
+                    confirmCode
+                )}&ClientName=${clientName}`,
                 requestOptions
             )
             const body = JSON.parse(await response.text())
@@ -242,8 +244,9 @@ const resendOTP = ({ tokenId }) => {
     })
 }
 
-const setTokenAndExpDate = ({ token, expDate }) => {
+const storeAuthData = ({ token, expDate, tokenId }) => {
     localStorage.setItem('token', token)
+    localStorage.setItem('tokenId', tokenId)
     localStorage.setItem('expDate', new Date(expDate).getTime())
 }
 export const getToken = () => {
@@ -255,6 +258,16 @@ export const getToken = () => {
         return undefined
     }
 }
+export const getTokenId = () => {
+    const now = new Date(Date.now()).getTime()
+    const expDate = Number.parseInt(localStorage.getItem('expDate'))
+    if (now < expDate) {
+        return localStorage.getItem('tokenId')
+    } else {
+        return undefined
+    }
+}
+
 export const verifyOTP_and_signin = () => {
     return async (dispatch, getState) => {
         try {
@@ -269,11 +282,14 @@ export const verifyOTP_and_signin = () => {
             const clientName =
                 getState().layout_reducer.confirmCodeModal.clientName
             const data = await verifyOTP({ confirmCode, tokenId, clientName })
-            setTokenAndExpDate({
+            storeAuthData({
                 token: data.AccessToken,
+                tokenId: data.TokenID,
                 expDate: data.ExpDate,
             })
-            dispatch({ type: 'AUTHENTICATED' })
+            const storeId = getState().home_page_reducer.storeId
+            dispatch(makeRequests(storeId))
+            dispatch(authCheck())
             dispatch(
                 snackBar({
                     show: true,
@@ -345,8 +361,17 @@ export const authCheck = () => {
     return async (dispatch, getState) => {
         try {
             const token = getToken()
+            const tokenId = getTokenId()
             if (token) {
                 dispatch({ type: 'AUTHENTICATED' })
+                const userData = await fetchAuthenticatedUser({
+                    accessToken: token,
+                    tokenId,
+                })
+                dispatch({
+                    type: 'authorization_reducer-currentUser',
+                    data: userData,
+                })
             } else {
                 dispatch({ type: 'NOT_AUTHENTICATED' })
             }
@@ -366,4 +391,26 @@ const logoutUser = () => {
 const deleteUserData = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('expDate')
+}
+
+export const fetchAuthenticatedUser = ({ tokenId, accessToken }) => {
+    return new Promise(async (resolve, reject) => {
+        var requestOptions = {
+            method: 'GET',
+            headers: {
+                AccessToken: accessToken,
+                TokenID: tokenId,
+            },
+        }
+        try {
+            var response = await axios.get(`${base_url}/D/data`, requestOptions)
+            if (response.statusText === 'OK') {
+                resolve(response.data)
+            } else {
+                reject()
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
 }

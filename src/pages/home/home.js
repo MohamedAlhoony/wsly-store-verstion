@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import MenuSection from './menuSection/menuSection'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions/home'
+import * as layoutActions from '../../redux/actions/layout'
 import { useParams } from 'react-router-dom'
 import OrderModal from './orderModal/orderModal'
 import CartSection from './cartSection/cartSection'
@@ -91,6 +92,10 @@ const Home = (props) => {
     }
     const handleToggleSubmitModal = (event, reason) => {
         if (reason && reason === 'backdropClick') return
+        if (!props.submitModal.show && !props.loggedIn) {
+            props.dispatch(layoutActions.signinModal({ show: true }))
+            return
+        }
         props.dispatch(actions.submitModal({ show: !props.submitModal.show }))
     }
     const handleSubmitModalInputChange = ({ id, value }) => {
@@ -134,7 +139,14 @@ const Home = (props) => {
         props.dispatch({ type: 'home_page-filterValue', data: value })
         _handleFilterChange(props)
     }
-
+    const handleMarkerClick = (item) => {
+        props.dispatch(actions.handleMarkerClick(item))
+    }
+    const handleAddLocation = () => {
+        props.dispatch(
+            layoutActions.locationModal({ showGuide: true, show: true })
+        )
+    }
     // const handleToggleConfirmCodeModal = (event, reason) => {
     //     if (reason && reason === 'backdropClick') return
     //     props.dispatch(
@@ -175,10 +187,13 @@ const Home = (props) => {
                         sx={{ fontSize: 'inherit' }}
                     />
                     &nbsp;
-                    {props.data?.Name}
+                    {props.name}
                 </Typography>
             </AppBar>
             <SubmitModal
+                handleAddLocation={handleAddLocation}
+                handleMarkerClick={handleMarkerClick}
+                locations={props.currentUser?.Locations}
                 submit={submit}
                 handleSubmitModalInputChange={handleSubmitModalInputChange}
                 handleToggleSubmitModal={handleToggleSubmitModal}
@@ -232,6 +247,7 @@ const Home = (props) => {
                 {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
                 <Box p={1} dir={theme.direction}>
                     <MenuSection
+                        isLoading={props.isLoading}
                         handleFilterChange={handleFilterChange}
                         filterValue={props.filterValue}
                         cart={props.cart}
@@ -260,21 +276,25 @@ const Home = (props) => {
     )
 }
 
-export default connect(({ home_page_reducer }, props) => {
-    return {
-        data: home_page_reducer.data,
-        isLoading: home_page_reducer.isLoading,
-        categories: home_page_reducer.data?.categories,
-        name: home_page_reducer.data?.Name,
-        isAvailable: home_page_reducer.data?.IsAvailable,
-        ID: home_page_reducer.data?.IsAvailable.ID,
-        categoryInputValue: home_page_reducer.categoryInputValue,
-        filteredListItems: home_page_reducer.filteredListItems,
-        orderModal: home_page_reducer.orderModal,
-        submitModal: home_page_reducer.submitModal,
-        cart: home_page_reducer.cart,
-        forNameOptions: home_page_reducer.forNameOptions,
-        filterValue: home_page_reducer.filterValue,
-        // confirmCodeModal: home_page_reducer.confirmCodeModal,
+export default connect(
+    ({ home_page_reducer, authorization_reducer }, props) => {
+        return {
+            data: home_page_reducer.data,
+            loggedIn: authorization_reducer.loggedIn,
+            currentUser: authorization_reducer.currentUser,
+            isLoading: home_page_reducer.isLoading,
+            categories: home_page_reducer.data?.StoreMenue?.categories,
+            name: home_page_reducer.data?.StoreMenue?.Name,
+            isAvailable: home_page_reducer.data?.StoreMenue?.IsAvailable,
+            ID: home_page_reducer.data?.StoreMenue?.IsAvailable.ID,
+            categoryInputValue: home_page_reducer.categoryInputValue,
+            filteredListItems: home_page_reducer.filteredListItems,
+            orderModal: home_page_reducer.orderModal,
+            submitModal: home_page_reducer.submitModal,
+            cart: home_page_reducer.cart,
+            forNameOptions: home_page_reducer.forNameOptions,
+            filterValue: home_page_reducer.filterValue,
+            // confirmCodeModal: home_page_reducer.confirmCodeModal,
+        }
     }
-})(Home)
+)(Home)

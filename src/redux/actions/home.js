@@ -1,12 +1,15 @@
 import { base_url } from '../../config'
+import { getToken, getTokenId } from './authorization'
+import axios from 'axios'
+
 const normalizeData = (data) => {
-    let categories = data.categories.slice()
+    let categories = data.StoreMenue.categories.slice()
     let allItems = []
     categories.forEach((category) => {
         allItems = allItems.concat(category.items)
     })
     categories.unshift({ Name: 'كل الأصناف', Id: 0, items: allItems })
-    data.categories = categories
+    data.StoreMenue.categories = categories
 
     return data
 }
@@ -15,12 +18,23 @@ export const makeRequests = (storeID) => {
         return new Promise(async (resolve, reject) => {
             try {
                 dispatch(isLoading(true))
-                const [data] = await Promise.all([getOrdersList(storeID)])
+                const [data] = await Promise.all([
+                    getOrdersList({
+                        storeID,
+                        accessToken: getToken(),
+                        tokenId: getTokenId(),
+                    }),
+                ])
+                dispatch({ type: 'home_page-storeId', data: storeID })
                 dispatch({
                     type: 'home_page-data',
                     data: normalizeData(data),
                 })
-                dispatch(handleCategoryInputValueChange(data.categories[0].Id))
+                dispatch(
+                    handleCategoryInputValueChange(
+                        data.StoreMenue.categories[0].Id
+                    )
+                )
                 dispatch(isLoading(false))
                 resolve(data)
             } catch (error) {
@@ -38,23 +52,24 @@ export const isLoading = (isLoading) => {
     }
 }
 
-const getOrdersList = (storeID) => {
+const getOrdersList = ({ storeID, accessToken, tokenId }) => {
     return new Promise(async (resolve, reject) => {
-        var myHeaders = new Headers()
-        myHeaders.append('Content-Type', 'application/json')
         var requestOptions = {
             method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
+            headers: accessToken
+                ? {
+                      AccessToken: accessToken,
+                      TokenID: tokenId,
+                  }
+                : {},
         }
         try {
-            var response = await fetch(
+            var response = await axios.get(
                 `${base_url}/d/store?id=${storeID}`,
                 requestOptions
             )
-            const body = JSON.parse(await response.text())
-            if (response.status === 200) {
-                resolve(body)
+            if (response.statusText === 'OK') {
+                resolve(response.data)
             } else {
                 reject()
             }
@@ -66,7 +81,8 @@ const getOrdersList = (storeID) => {
 
 export const handleCategoryInputValueChange = (value) => {
     return (dispatch, getState) => {
-        const categories = getState().home_page_reducer.data.categories.slice()
+        const categories =
+            getState().home_page_reducer.data.StoreMenue.categories.slice()
         const listItems = categories.find(
             (category) => category.Id === value
         ).items
@@ -220,27 +236,40 @@ export const removeFromCart = (index) => {
         )
     }
 }
-const submitRequest = ({ storeID, telNo, clientName, isDelivery, items }) => {
+const submitRequest = ({
+    storeID,
+    IsDelivery,
+    items,
+    LocationID,
+    accessToken,
+    tokenId,
+}) => {
     return new Promise(async (resolve, reject) => {
         var myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
+            headers: accessToken
+                ? {
+                      AccessToken: accessToken,
+                      TokenID: tokenId,
+                  }
+                : {},
             redirect: 'follow',
-            body: JSON.stringify({
-                TelNo: telNo,
-                ClientName: clientName,
-                StoreID: storeID,
-                isDelivery,
-                items,
-            }),
+        }
+        const requestBody = {
+            StoreID: storeID,
+            IsDelivery,
+            LocationID,
+            items,
         }
         try {
-            var response = await fetch(`${base_url}/d/order`, requestOptions)
-            const body = JSON.parse(await response.text())
-            if (response.status >= 200 && response.status < 300) {
-                resolve(body)
+            var response = await axios.post(
+                `${base_url}/d/order`,
+                requestBody,
+                requestOptions
+            )
+            if (response.statusText === 'Created') {
+                resolve(response.data)
             } else {
                 reject()
             }
@@ -258,11 +287,11 @@ export const submit = (storeID) => {
                     isLoading: true,
                 })
             )
-            const telNo = getState().home_page_reducer.submitModal.telNo
+            const LocationID =
+                getState().home_page_reducer.submitModal.selectedLocation
+                    ?.LocationID
             const cart = getState().home_page_reducer.cart
-            const clientName =
-                getState().home_page_reducer.submitModal.clientName
-            const isDelivery =
+            const IsDelivery =
                 getState().home_page_reducer.submitModal.isDelivery
             const items = cart.map((item) => {
                 return {
@@ -283,10 +312,11 @@ export const submit = (storeID) => {
             })
             const body = await submitRequest({
                 storeID,
-                telNo,
-                clientName,
-                isDelivery,
+                LocationID,
+                IsDelivery,
                 items,
+                accessToken: getToken(),
+                tokenId: getTokenId(),
             })
             dispatch(
                 snackBar({
@@ -300,8 +330,7 @@ export const submit = (storeID) => {
                 submitModal({
                     isLoading: false,
                     show: false,
-                    clientName: '',
-                    telNo: '',
+                    selectedLocation: null,
                 })
             )
             dispatch(
@@ -313,7 +342,7 @@ export const submit = (storeID) => {
             )
             dispatch({ type: 'home_page-cart', data: [] })
         } catch (error) {
-            dispatch(submitModal({ isloading: false }))
+            dispatch(submitModal({ isLoading: false }))
             dispatch(
                 snackBar({
                     show: true,
@@ -510,4 +539,18 @@ const resendConfirmationCodeRequest = ({ orderId }) => {
             reject(error)
         }
     })
+}
+
+export const handleMarkerClick = (item) => {
+    return (dispatch) => {
+        dispatch(submitModal({ selectedLocation: item }))
+        dispatch(
+            snackBar({
+                show: true,
+                closeDuration: 1000,
+                severity: 'info',
+                message: 'تم اختيار الموقع',
+            })
+        )
+    }
 }

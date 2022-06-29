@@ -2,6 +2,7 @@ let defaultState = {
     isLoading: false,
     data: null,
     cart: [],
+    storeId: null,
     categoryInputValue: '',
     listItems: [],
     filteredListItems: [],
@@ -25,6 +26,7 @@ let defaultState = {
         clientName: '',
         telNo: '',
         isDelivery: true,
+        selectedLocation: null,
     },
     confirmCodeModal: {
         timer: null,
@@ -37,6 +39,11 @@ let defaultState = {
 
 const home_page_reducer = (state = defaultState, action) => {
     switch (action.type) {
+        case 'home_page-storeId':
+            return {
+                ...state,
+                storeId: action.data,
+            }
         case 'home_page-isLoading':
             return {
                 ...state,
