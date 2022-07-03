@@ -22,8 +22,7 @@ const MyMapComponent = withScriptjs(
             defaultCenter={{ lat: 32.8872, lng: 13.1913 }}
         >
             {props.locations.map((item, key) => {
-                return item.LocationName &&
-                    item.LocationName !== 'undefined' ? (
+                return item.LocationName ? (
                     <MarkerWithLabel
                         labelClass={'marker-label'}
                         labelStyle={{
@@ -77,9 +76,7 @@ const MyMapComponent = withScriptjs(
                 </Button>
             </CustomMapControl>
             {props.submitModal.selectedLocation ? (
-                props.submitModal.selectedLocation &&
-                props.submitModal.selectedLocation.LocationName !==
-                    'undefined' ? (
+                props.submitModal.selectedLocation.LocationName ? (
                     <MarkerWithLabel
                         labelClass={'marker-label'}
                         labelStyle={{

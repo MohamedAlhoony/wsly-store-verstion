@@ -229,8 +229,7 @@ export const addPersonsToList = (persons) => {
         let forNameOptions = getState().home_page_reducer.forNameOptions.slice()
         let listItems = getState().home_page_reducer.listItems.slice()
         persons.forEach((person, personIndex) => {
-            forNameOptions.unshift({ forName: person.PersonName })
-            forNameOptions[personIndex].items = []
+            forNameOptions.unshift({ forName: person.PersonName, items: [] })
             person.items.forEach((item, itemIndex) => {
                 const listItemIndex = listItems.findIndex(
                     (oItem) => oItem.Id === item.id
@@ -253,6 +252,7 @@ export const addPersonsToList = (persons) => {
                 })
             })
         })
+        console.log(forNameOptions)
         dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
     }
 }
