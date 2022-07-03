@@ -23,6 +23,8 @@ const initialState = {
         center: { lat: 32.8872, lng: 13.1913 },
         zoom: 12,
         showGuide: true,
+        locationName: '',
+        noteForDriver: '',
     },
 }
 

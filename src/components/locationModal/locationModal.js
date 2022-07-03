@@ -45,6 +45,36 @@ export default function LocationModal(props) {
                 ) : (
                     <>
                         <Grid container spacing={3}>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    onChange={(e) => {
+                                        props.handleLocationModalInputChange({
+                                            id: 'locationName',
+                                            value: e.target.value,
+                                        })
+                                    }}
+                                    value={props.locationModal.locationName}
+                                    label="اسم الموقع"
+                                    fullWidth
+                                    type="text"
+                                    variant="filled"
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    onChange={(e) => {
+                                        props.handleLocationModalInputChange({
+                                            id: 'noteForDriver',
+                                            value: e.target.value,
+                                        })
+                                    }}
+                                    value={props.locationModal.noteForDriver}
+                                    label="ملاحظة للسائق"
+                                    fullWidth
+                                    type="text"
+                                    variant="filled"
+                                />
+                            </Grid>
                             <Grid item xs={12}>
                                 <Map
                                     updateMapZoom={props.updateMapZoom}

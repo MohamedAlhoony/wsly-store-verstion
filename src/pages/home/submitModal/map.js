@@ -8,6 +8,11 @@ import {
 import CustomMapControl from './customControl'
 import { Button, Typography } from '@mui/material'
 import AddLocation from '@mui/icons-material/AddLocation'
+const labelSize = { width: 220 }
+const labelPadding = 8
+const {
+    MarkerWithLabel,
+} = require('react-google-maps/lib/components/addons/MarkerWithLabel')
 
 const MyMapComponent = withScriptjs(
     withGoogleMap((props) => (
@@ -17,8 +22,37 @@ const MyMapComponent = withScriptjs(
             defaultCenter={{ lat: 32.8872, lng: 13.1913 }}
         >
             {props.locations.map((item, key) => {
-                return (
+                return item.LocationName &&
+                    item.LocationName !== 'undefined' ? (
+                    <MarkerWithLabel
+                        labelClass={'marker-label'}
+                        labelStyle={{
+                            textAlign: 'center',
+                            backgroundColor: '#f5a62b',
+                            fontSize: '15px',
+
+                            padding: '5px',
+                            borderRadius: '50px',
+                        }}
+                        labelAnchor={{
+                            x: 0,
+                            y: 70,
+                        }}
+                        onClick={() => props.handleMarkerClick(item)}
+                        key={key}
+                        icon={'/images/marker.svg'}
+                        position={{ lat: item.Lat, lng: item.Lang }}
+                    >
+                        <Typography component={'span'}>
+                            {item.LocationName}
+                        </Typography>
+                    </MarkerWithLabel>
+                ) : (
                     <Marker
+                        labelAnchor={{
+                            x: 0,
+                            y: 70,
+                        }}
                         onClick={() => props.handleMarkerClick(item)}
                         key={key}
                         icon={'/images/marker.svg'}
@@ -43,14 +77,51 @@ const MyMapComponent = withScriptjs(
                 </Button>
             </CustomMapControl>
             {props.submitModal.selectedLocation ? (
-                <Marker
-                    zIndex={1000}
-                    icon={'/images/marker-selected.svg'}
-                    position={{
-                        lat: props.submitModal.selectedLocation.Lat,
-                        lng: props.submitModal.selectedLocation.Lang,
-                    }}
-                />
+                props.submitModal.selectedLocation &&
+                props.submitModal.selectedLocation.LocationName !==
+                    'undefined' ? (
+                    <MarkerWithLabel
+                        labelClass={'marker-label'}
+                        labelStyle={{
+                            textAlign: 'center',
+                            backgroundColor: '#f5a62b',
+                            fontSize: '15px',
+                            padding: '5px',
+                            borderRadius: '50px',
+                        }}
+                        labelAnchor={{
+                            x: 0,
+                            y: 70,
+                        }}
+                        zIndex={1000}
+                        icon={'/images/marker-selected.svg'}
+                        position={{
+                            lat: props.submitModal.selectedLocation.Lat,
+                            lng: props.submitModal.selectedLocation.Lang,
+                        }}
+                    >
+                        <Typography component={'span'}>
+                            {props.submitModal.selectedLocation.LocationName ===
+                            'undefined'
+                                ? null
+                                : props.submitModal.selectedLocation
+                                      .LocationName}
+                        </Typography>
+                    </MarkerWithLabel>
+                ) : (
+                    <Marker
+                        labelAnchor={{
+                            x: 0,
+                            y: 70,
+                        }}
+                        zIndex={1000}
+                        icon={'/images/marker-selected.svg'}
+                        position={{
+                            lat: props.submitModal.selectedLocation.Lat,
+                            lng: props.submitModal.selectedLocation.Lang,
+                        }}
+                    />
+                )
             ) : null}
         </GoogleMap>
     ))

@@ -118,10 +118,16 @@ export const handleLocationSubmit = () => {
                 })
             )
             const location = getState().layout_reducer.locationModal.location
+            const noteForDriver =
+                getState().layout_reducer.locationModal.noteForDriver
+            const locationName =
+                getState().layout_reducer.locationModal.locationName
             const body = await addLocationRequest({
                 accessToken: getToken(),
                 tokenId: getTokenId(),
                 location,
+                locationName,
+                noteForDriver,
             })
             const userData = await fetchAuthenticatedUser({
                 accessToken: getToken(),
@@ -171,7 +177,7 @@ const addLocationRequest = ({
     accessToken,
     tokenId,
     locationName,
-    notoForDriver,
+    noteForDriver,
 }) => {
     return new Promise(async (resolve, reject) => {
         var myHeaders = new Headers()
@@ -188,7 +194,7 @@ const addLocationRequest = ({
         const requestBody = {}
         try {
             var response = await axios.post(
-                `${base_url}/D/Location?Lat=${location.lat}&Lang=${location.lng}&LocationName=${locationName}&NoteForDriver=${notoForDriver}`,
+                `${base_url}/D/Location?Lat=${location.lat}&Lang=${location.lng}&LocationName=${locationName}&NoteForDriver=${noteForDriver}`,
                 requestBody,
                 requestOptions
             )

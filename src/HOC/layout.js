@@ -172,6 +172,9 @@ const Layout = (props) => {
     const handleLocationSubmit = () => {
         props.dispatch(actions.handleLocationSubmit())
     }
+    const handleLocationModalInputChange = ({ id, value }) => {
+        props.dispatch(actions.locationModal({ [id]: value }))
+    }
     return (
         <Container sx={{ px: 1 }}>
             <SnackBar closeSnackBar={closeSnackBar} snackBar={props.snackBar} />
@@ -183,6 +186,7 @@ const Layout = (props) => {
                 updateMapZoom={updateMapZoom}
                 locationModal={props.locationModal}
                 toggleLocationModal={toggleLocationModal}
+                handleLocationModalInputChange={handleLocationModalInputChange}
             />
             <SigninModal
                 signin={signin}
