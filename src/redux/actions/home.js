@@ -1,5 +1,5 @@
 import { base_url } from '../../config'
-import { getToken, getTokenId } from './authorization'
+import { getToken, getTokenId, fetchAuthenticatedUser } from './authorization'
 import axios from 'axios'
 
 const normalizeData = (data) => {
@@ -18,14 +18,22 @@ export const makeRequests = (storeID) => {
         return new Promise(async (resolve, reject) => {
             try {
                 dispatch(isLoading(true))
-                const [data] = await Promise.all([
+                const [data, userData] = await Promise.all([
                     getOrdersList({
                         storeID,
                         accessToken: getToken(),
                         tokenId: getTokenId(),
                     }),
+                    fetchAuthenticatedUser({
+                        accessToken: getToken(),
+                        tokenId: getTokenId(),
+                    }),
                 ])
                 dispatch({ type: 'home_page-storeId', data: storeID })
+                dispatch({
+                    type: 'authorization_reducer-currentUser',
+                    data: userData,
+                })
                 dispatch({
                     type: 'home_page-data',
                     data: normalizeData(data),
@@ -36,6 +44,7 @@ export const makeRequests = (storeID) => {
                     )
                 )
                 if (data.Persons?.length) {
+                    dispatch({ type: 'home_page-forNameOptions', data: [] })
                     dispatch(addPersonsToList(data.Persons))
                 }
                 dispatch(isLoading(false))
@@ -164,7 +173,7 @@ export const handlePrefChange = (value, index) => {
 }
 
 export const addToCart = () => {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         const orderModalState = getState().home_page_reducer.orderModal
         let cart = getState().home_page_reducer.cart.slice()
         const forName = orderModalState.forName
@@ -194,6 +203,7 @@ export const addToCart = () => {
         if (forName !== '') {
             let forNameOptions =
                 getState().home_page_reducer.forNameOptions.slice()
+
             let itemIndex = forNameOptions.findIndex(
                 (item) => item.forName === forName
             )
@@ -207,6 +217,11 @@ export const addToCart = () => {
                     forNameOptions[itemIndex].items.push(listItem)
                 }
             } else {
+                await addNewPersonRequest({
+                    name: forName,
+                    accessToken: getToken(),
+                    tokenId: getTokenId(),
+                })
                 forNameOptions.unshift({ forName, items: [listItem] })
             }
             dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
@@ -228,8 +243,20 @@ export const addPersonsToList = (persons) => {
     return (dispatch, getState) => {
         let forNameOptions = getState().home_page_reducer.forNameOptions.slice()
         let listItems = getState().home_page_reducer.listItems.slice()
+        const userPersons =
+            getState().authorization_reducer.currentUser?.Persons ?? []
+        userPersons.forEach((person) => {
+            forNameOptions.unshift({
+                forName: person.PersonName,
+                items: [],
+                id: person.PersonID,
+            })
+        })
         persons.forEach((person, personIndex) => {
-            forNameOptions.unshift({ forName: person.PersonName, items: [] })
+            let personObjIndex = forNameOptions.findIndex(
+                (personItem) => personItem.PersonID === person.id
+            )
+            console.log(personObjIndex)
             person.items.forEach((item, itemIndex) => {
                 const listItemIndex = listItems.findIndex(
                     (oItem) => oItem.Id === item.id
@@ -246,13 +273,12 @@ export const addPersonsToList = (persons) => {
                             )
                     }
                 )
-                forNameOptions[personIndex].items.push({
+                forNameOptions[personObjIndex].items.push({
                     ...listItems[listItemIndex],
                     preferences: preferences,
                 })
             })
         })
-        console.log(forNameOptions)
         dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
     }
 }
@@ -301,6 +327,37 @@ const submitRequest = ({
         try {
             var response = await axios.post(
                 `${base_url}/d/order`,
+                requestBody,
+                requestOptions
+            )
+            if (response.statusText === 'Created') {
+                resolve(response.data)
+            } else {
+                reject()
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+const addNewPersonRequest = ({ accessToken, tokenId, name }) => {
+    return new Promise(async (resolve, reject) => {
+        var myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+        var requestOptions = {
+            headers: accessToken
+                ? {
+                      AccessToken: accessToken,
+                      TokenID: tokenId,
+                  }
+                : {},
+            redirect: 'follow',
+        }
+        const requestBody = {}
+        try {
+            var response = await axios.post(
+                `${base_url}/D/Person?Name=${name}`,
                 requestBody,
                 requestOptions
             )

@@ -55,7 +55,7 @@ export default function OrderModal(props) {
                                     disablePortal
                                     id="combo-box-demo"
                                     options={props.forNameOptions.map(
-                                        (item) => {
+                                        (item, key) => {
                                             return {
                                                 ...item,
                                                 label: item.forName,

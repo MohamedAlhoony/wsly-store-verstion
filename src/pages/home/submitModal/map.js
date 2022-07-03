@@ -85,6 +85,7 @@ const MyMapComponent = withScriptjs(
                             fontSize: '15px',
                             padding: '5px',
                             borderRadius: '50px',
+                            zIndex: '5000',
                         }}
                         labelAnchor={{
                             x: 0,
