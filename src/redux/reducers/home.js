@@ -52,7 +52,28 @@ const home_page_reducer = (state = defaultState, action) => {
         case 'home_page-forNameOptions':
             return {
                 ...state,
-                forNameOptions: action.data,
+                forNameOptions: action.data.map((option) => {
+                    return {
+                        forName: option.forName,
+                        items: option.items.map((item) => {
+                            return {
+                                ...item,
+                                preferences: item.preferences.map((pref) => {
+                                    return {
+                                        ...pref,
+                                        choices: pref.choices.map((choice) => {
+                                            return { ...choice }
+                                        }),
+                                        choiceValue: {
+                                            ...pref.choiceValue,
+                                        },
+                                        choice: { ...pref.choice },
+                                    }
+                                }),
+                            }
+                        }),
+                    }
+                }),
             }
         case 'home_page-cart':
             return {

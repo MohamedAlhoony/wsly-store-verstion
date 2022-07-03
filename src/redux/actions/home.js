@@ -35,6 +35,9 @@ export const makeRequests = (storeID) => {
                         data.StoreMenue.categories[0].Id
                     )
                 )
+                if (data.Persons?.length) {
+                    dispatch(addPersonsToList(data.Persons))
+                }
                 dispatch(isLoading(false))
                 resolve(data)
             } catch (error) {
@@ -218,6 +221,39 @@ export const addToCart = () => {
                 message: 'تمت الإضافة للسلة',
             })
         )
+    }
+}
+
+export const addPersonsToList = (persons) => {
+    return (dispatch, getState) => {
+        let forNameOptions = getState().home_page_reducer.forNameOptions.slice()
+        let listItems = getState().home_page_reducer.listItems.slice()
+        persons.forEach((person, personIndex) => {
+            forNameOptions.unshift({ forName: person.PersonName })
+            forNameOptions[personIndex].items = []
+            person.items.forEach((item, itemIndex) => {
+                const listItemIndex = listItems.findIndex(
+                    (oItem) => oItem.Id === item.id
+                )
+
+                let preferences = listItems[listItemIndex].preferences
+
+                item.clientPreferences.forEach(
+                    (clientPreference, clientPreferenceIndex) => {
+                        preferences[clientPreferenceIndex].choiceValue =
+                            preferences[[clientPreferenceIndex]].choices.find(
+                                (choice) =>
+                                    choice.Id === clientPreference.ChoiceID
+                            )
+                    }
+                )
+                forNameOptions[personIndex].items.push({
+                    ...listItems[listItemIndex],
+                    preferences: preferences,
+                })
+            })
+        })
+        dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
     }
 }
 
