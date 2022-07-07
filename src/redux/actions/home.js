@@ -217,11 +217,34 @@ export const addToCart = () => {
                     forNameOptions[itemIndex].items.push(listItem)
                 }
             } else {
-                await addNewPersonRequest({
-                    name: forName,
-                    accessToken: getToken(),
-                    tokenId: getTokenId(),
-                })
+                try {
+                    dispatch(orderModal({ isLoading: true }))
+                    await addNewPersonRequest({
+                        name: forName,
+                        accessToken: getToken(),
+                        tokenId: getTokenId(),
+                    })
+                    const userData = await fetchAuthenticatedUser({
+                        accessToken: getToken(),
+                        tokenId: getTokenId(),
+                    })
+                    dispatch({
+                        type: 'authorization_reducer-currentUser',
+                        data: userData,
+                    })
+                    dispatch(orderModal({ isLoading: false }))
+                } catch (err) {
+                    dispatch(orderModal({ isLoading: false }))
+                    dispatch(
+                        snackBar({
+                            show: true,
+                            closeDuration: 4000,
+                            severity: 'error',
+                            message: 'فشلت العملية',
+                        })
+                    )
+                    return
+                }
                 forNameOptions.unshift({ forName, items: [listItem] })
             }
             dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
@@ -319,7 +342,7 @@ const submitRequest = ({
             redirect: 'follow',
         }
         const requestBody = {
-            StoreID: storeID,
+            StoreID: Number.parseInt(storeID),
             IsDelivery,
             LocationID,
             items,
@@ -388,7 +411,10 @@ export const submit = (storeID) => {
                 getState().home_page_reducer.submitModal.isDelivery
             const items = cart.map((item) => {
                 return {
-                    For: item.forName,
+                    PersonID:
+                        getState().authorization_reducer.currentUser.Persons.find(
+                            (person) => person.PersonName === item.forName
+                        ).PersonID,
                     Qty: item.qty,
                     item: {
                         id: item.listItem.Id,
@@ -435,6 +461,7 @@ export const submit = (storeID) => {
             )
             dispatch({ type: 'home_page-cart', data: [] })
         } catch (error) {
+            console.log(error)
             dispatch(submitModal({ isLoading: false }))
             dispatch(
                 snackBar({

@@ -8,9 +8,11 @@ let defaultState = {
     filteredListItems: [],
     forNameOptions: [],
     orderModal: {
+        isLoading: false,
         show: false,
         listItem: null,
         forName: '',
+        forNameErrMsg: '',
         qty: 1,
     },
     snackBar: {

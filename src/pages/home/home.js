@@ -63,7 +63,8 @@ const Home = (props) => {
     const handleCategoryInputValueChange = (value) => {
         props.dispatch(actions.handleCategoryInputValueChange(value))
     }
-    const handleCloseOrderModal = () => {
+    const handleCloseOrderModal = (event, reason) => {
+        if (reason && reason === 'backdropClick') return
         props.dispatch(actions.orderModal({ show: false, qty: 1, forName: '' }))
     }
     const handleItemListClick = (item) => {
@@ -73,7 +74,9 @@ const Home = (props) => {
         props.dispatch(actions.handlePrefChange(value, index))
     }
     const handleForNameChange = (value) => {
-        props.dispatch(actions.orderModal({ forName: value }))
+        props.dispatch(
+            actions.orderModal({ forName: value, forNameErrMsg: '' })
+        )
     }
     const handleQtyChange = ({ id }) => {
         let qty = props.orderModal.qty
@@ -85,6 +88,12 @@ const Home = (props) => {
         props.dispatch(actions.orderModal({ qty }))
     }
     const addToCart = () => {
+        if (props.orderModal.forName.trim() === '') {
+            props.dispatch(
+                actions.orderModal({ forNameErrMsg: 'يجب تعبأة الحقل' })
+            )
+            return
+        }
         props.dispatch(actions.addToCart())
     }
     const handleRemoveProduct = (index) => {
@@ -116,6 +125,7 @@ const Home = (props) => {
         return cartQty
     }
     const forNameAutocompleteChange = (value) => {
+        props.dispatch(actions.orderModal({ forNameErrMsg: '' }))
         let listItemIndex = value.items.findIndex(
             (item) => item.Id === props.orderModal.listItem.Id
         )

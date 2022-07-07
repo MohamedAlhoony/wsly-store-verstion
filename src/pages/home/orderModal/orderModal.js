@@ -16,7 +16,9 @@ import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantity
 import Preferences from './preferences/preferences'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
+import CircularProgress from '@mui/material/CircularProgress'
 import styles from './styles.module.scss'
+import { Typography } from '@mui/material'
 export default function OrderModal(props) {
     return (
         <div>
@@ -35,116 +37,166 @@ export default function OrderModal(props) {
                 </DialogTitle>
 
                 <DialogContent>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                            <Paper
-                                variant="outlined"
-                                component="form"
-                                sx={{
-                                    p: '2px 4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Autocomplete
-                                    blurOnSelect={true}
-                                    onChange={(e, value) => {
-                                        props.forNameAutocompleteChange(value)
-                                    }}
-                                    fullWidth
-                                    disablePortal
-                                    id="combo-box-demo"
-                                    options={props.forNameOptions.map(
-                                        (item, key) => {
-                                            return {
-                                                ...item,
-                                                label: item.forName,
-                                            }
-                                        }
-                                    )}
-                                    renderInput={(params) => (
-                                        <div ref={params.InputProps.ref}>
-                                            <input
-                                                {...params.inputProps}
-                                                onChange={(e) =>
-                                                    props.handleForNameChange(
-                                                        e.target.value
-                                                    )
+                    {props.orderModal.isLoading ? (
+                        <Grid
+                            item
+                            xs={12}
+                            display={'flex'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            sx={{ height: 1, width: 1 }}
+                        >
+                            <CircularProgress />
+                        </Grid>
+                    ) : (
+                        <>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} sm={6}>
+                                    <Paper
+                                        variant="outlined"
+                                        component="form"
+                                        sx={{
+                                            p: '2px 4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            borderColor:
+                                                props.orderModal
+                                                    .forNameErrMsg !== ''
+                                                    ? '#d32f2f'
+                                                    : 'none',
+                                        }}
+                                    >
+                                        <Autocomplete
+                                            blurOnSelect={true}
+                                            onChange={(e, value) => {
+                                                props.forNameAutocompleteChange(
+                                                    value
+                                                )
+                                            }}
+                                            fullWidth
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            options={props.forNameOptions.map(
+                                                (item, key) => {
+                                                    return {
+                                                        ...item,
+                                                        label: item.forName,
+                                                    }
                                                 }
-                                                value={props.orderModal.forName}
-                                                placeholder="الاسم"
-                                                className={styles.forNameInput}
-                                            />
-                                        </div>
-                                    )}
-                                />
+                                            )}
+                                            renderInput={(params) => (
+                                                <div
+                                                    ref={params.InputProps.ref}
+                                                >
+                                                    <input
+                                                        {...params.inputProps}
+                                                        onChange={(e) =>
+                                                            props.handleForNameChange(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        value={
+                                                            props.orderModal
+                                                                .forName
+                                                        }
+                                                        placeholder="الاسم"
+                                                        className={
+                                                            styles.forNameInput
+                                                        }
+                                                    />
+                                                </div>
+                                            )}
+                                        />
 
-                                <PersonIcon
-                                    color={'action'}
-                                    sx={{ p: '10px' }}
-                                />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Paper
-                                variant="outlined"
-                                component="form"
-                                sx={{
-                                    p: '2px 4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    maxWidth: 200,
-                                }}
-                            >
-                                <IconButton
-                                    onClick={() =>
-                                        props.handleQtyChange({ id: 'add' })
-                                    }
-                                    sx={{ p: '10px' }}
-                                    aria-label="directions"
-                                >
-                                    <AddIcon />
-                                </IconButton>
+                                        <PersonIcon
+                                            color={'action'}
+                                            sx={{ p: '10px' }}
+                                        />
+                                    </Paper>
+                                    <Typography
+                                        fontSize={14}
+                                        mt={1}
+                                        color={'error'}
+                                    >
+                                        {props.orderModal.forNameErrMsg}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Paper
+                                        variant="outlined"
+                                        component="form"
+                                        sx={{
+                                            p: '2px 4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            maxWidth: 200,
+                                        }}
+                                    >
+                                        <IconButton
+                                            onClick={() =>
+                                                props.handleQtyChange({
+                                                    id: 'add',
+                                                })
+                                            }
+                                            sx={{ p: '10px' }}
+                                            aria-label="directions"
+                                        >
+                                            <AddIcon />
+                                        </IconButton>
 
-                                <Divider
-                                    sx={{ height: 28, m: 0.5 }}
-                                    orientation="vertical"
-                                />
-                                <InputBase
-                                    readOnly
-                                    value={`الكمية (${props.orderModal.qty})`}
-                                    sx={{ ml: 1, flex: 1 }}
-                                />
-                                <Divider
-                                    sx={{ height: 28, m: 0.5 }}
-                                    orientation="vertical"
-                                />
-                                <IconButton
-                                    onClick={() =>
-                                        props.handleQtyChange({
-                                            id: 'subtract',
-                                        })
+                                        <Divider
+                                            sx={{ height: 28, m: 0.5 }}
+                                            orientation="vertical"
+                                        />
+                                        <InputBase
+                                            readOnly
+                                            value={`الكمية (${props.orderModal.qty})`}
+                                            sx={{ ml: 1, flex: 1 }}
+                                        />
+                                        <Divider
+                                            sx={{ height: 28, m: 0.5 }}
+                                            orientation="vertical"
+                                        />
+                                        <IconButton
+                                            onClick={() =>
+                                                props.handleQtyChange({
+                                                    id: 'subtract',
+                                                })
+                                            }
+                                            sx={{ p: '10px' }}
+                                            aria-label="directions"
+                                        >
+                                            <RemoveIcon />
+                                        </IconButton>
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                            {props.orderModal.listItem?.preferences.length !==
+                                0 && (
+                                <Preferences
+                                    handlePrefChange={props.handlePrefChange}
+                                    preferences={
+                                        props.orderModal.listItem
+                                            ?.preferences ?? []
                                     }
-                                    sx={{ p: '10px' }}
-                                    aria-label="directions"
-                                >
-                                    <RemoveIcon />
-                                </IconButton>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                    {props.orderModal.listItem?.preferences.length !== 0 && (
-                        <Preferences
-                            handlePrefChange={props.handlePrefChange}
-                            preferences={
-                                props.orderModal.listItem?.preferences ?? []
-                            }
-                        />
+                                />
+                            )}
+                        </>
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.handleCloseOrderModal}>إلغاء</Button>
-                    <Button onClick={props.addToCart}>أضف للسلة</Button>
+                    <Button
+                        disabled={props.orderModal.isLoading}
+                        onClick={props.handleCloseOrderModal}
+                    >
+                        إلغاء
+                    </Button>
+                    <Button
+                        disabled={props.orderModal.isLoading}
+                        onClick={props.addToCart}
+                    >
+                        أضف للسلة
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>
