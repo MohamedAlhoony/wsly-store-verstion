@@ -279,7 +279,6 @@ export const addPersonsToList = (persons) => {
             let personObjIndex = forNameOptions.findIndex(
                 (personItem) => personItem.PersonID === person.id
             )
-            console.log(personObjIndex)
             person.items.forEach((item, itemIndex) => {
                 const listItemIndex = listItems.findIndex(
                     (oItem) => oItem.Id === item.id

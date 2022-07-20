@@ -140,11 +140,26 @@ const Home = (props) => {
             props.dispatch(
                 actions.orderModal({
                     forName: value.forName,
+                    listItem: getDefaultPreferences(),
                 })
             )
         }
     }
-
+    const getDefaultPreferences = () => {
+        return {
+            ...props.orderModal.listItem,
+            preferences: props.orderModal.listItem.preferences.map((pref) => {
+                return {
+                    ...pref,
+                    choices: pref.choices.map((choice) => {
+                        return { ...choice }
+                    }),
+                    choiceValue: { ...pref.choice },
+                    choice: { ...pref.choice },
+                }
+            }),
+        }
+    }
     const handleFilterChange = (value) => {
         props.dispatch({ type: 'home_page-filterValue', data: value })
         _handleFilterChange(props)

@@ -29,7 +29,7 @@ const getProductPrice = (item) => {
     let sum = 0
     sum = item.listItem.Price
     item.listItem.preferences.forEach((pref) => {
-        sum += pref.choiceValue.Price
+        sum += pref?.choiceValue?.Price ?? 0
     })
     return sum
 }

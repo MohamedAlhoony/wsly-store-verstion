@@ -13,7 +13,7 @@ const getTotal = (props) => {
     props.cart.forEach((item) => {
         sum += item.listItem.Price * item.qty
         item.listItem.preferences.forEach((pref) => {
-            sum += pref.choiceValue.Price * item.qty
+            sum += pref?.choiceValue?.Price ?? 0 * item.qty
         })
     })
     return sum

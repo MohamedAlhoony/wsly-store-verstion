@@ -67,6 +67,11 @@ export default function OrderModal(props) {
                                         }}
                                     >
                                         <Autocomplete
+                                            sx={{
+                                                '& .MuiAutocomplete-popper': {
+                                                    display: 'none',
+                                                },
+                                            }}
                                             blurOnSelect={true}
                                             onChange={(e, value) => {
                                                 props.forNameAutocompleteChange(
