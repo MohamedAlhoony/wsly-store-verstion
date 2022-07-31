@@ -29,7 +29,11 @@ const getCard = (location, props) => {
                 }}
             >
                 <CardHeader
-                    action={<LocationOnOutlined sx={{ fontSize: 30 }} />}
+                    action={
+                        <LocationOnOutlined
+                            sx={{ fontSize: 33, color: 'primary.main' }}
+                        />
+                    }
                     title={
                         location.LocationName ?? (
                             <Typography color={grey[500]}>

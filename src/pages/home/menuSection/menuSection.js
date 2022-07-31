@@ -6,7 +6,7 @@ import TopForm from './topFrom/topForm'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 const getSkeleton = () => {
-    return Array.apply(null, Array(5)).map((item, key) => {
+    return Array.apply(null, Array(12)).map((item, key) => {
         return (
             <Grid
                 xs={6}
