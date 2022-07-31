@@ -219,3 +219,74 @@ const addLocationRequest = ({
         }
     })
 }
+
+export const handleDeleteLocation = (location) => {
+    return async (dispatch, getState) => {
+        try {
+            const userData = getState().authorization_reducer.currentUser
+            let index = userData.Locations.findIndex((item) => {
+                console.log(item.LocationID, location.LocationID)
+                return location.locationID === item.locationID
+            })
+            userData.Locations[index].isDeleting = true
+            dispatch({
+                type: 'authorization_reducer-currentUser',
+                data: userData,
+            })
+            const body = await deleteLocationRequest({
+                accessToken: getToken(),
+                tokenId: getTokenId(),
+                locationId: location.LocationID,
+            })
+
+            dispatch(
+                snackBar({
+                    show: true,
+                    closeDuration: 4000,
+                    severity: 'info',
+                    message: 'تم الحذف بنجاح',
+                })
+            )
+        } catch (err) {
+            console.log(err)
+            dispatch(locationModal({ isLoading: false }))
+            dispatch(
+                snackBar({
+                    show: true,
+                    closeDuration: 4000,
+                    severity: 'error',
+                    message: 'فشلت عملية حذف الموقع',
+                })
+            )
+        }
+    }
+}
+
+export const deleteLocationRequest = ({ accessToken, tokenId, locationId }) => {
+    return new Promise(async (resolve, reject) => {
+        var myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+        var requestOptions = {
+            headers: accessToken
+                ? {
+                      AccessToken: accessToken,
+                      TokenID: tokenId,
+                  }
+                : {},
+            redirect: 'follow',
+        }
+        try {
+            var response = await axios.delete(
+                `${base_url}/D/Location?locationID=${locationId}`,
+                requestOptions
+            )
+            if (response.statusText === 'OK') {
+                resolve(response.data)
+            } else {
+                reject()
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}

@@ -3,6 +3,7 @@ import ProductsItems from './productsItems/productsItems'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import TopForm from './topFrom/topForm'
+import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 const getSkeleton = () => {
@@ -28,10 +29,14 @@ const getSkeleton = () => {
 
 const MenuSection = (props) => {
     return !props.isLoading ? (
-        <Box>
-            <TopForm {...props} />
-            <ProductsItems {...props} />
-        </Box>
+        props.isAvailable ? (
+            <Box>
+                <TopForm {...props} />
+                <ProductsItems {...props} />
+            </Box>
+        ) : (
+            <Alert severity="info">المتجر مغلق في الوقت الحالي</Alert>
+        )
     ) : (
         <Box>
             <Grid spacing={1} sx={{ mt: 2 }} container>

@@ -31,6 +31,7 @@ const getCard = (item, handleItemListClick, cart) => {
         <Box sx={{ width: 1 }}>
             <Card
                 variant={'elevation'}
+                elevation={2}
                 sx={{
                     height: 1,
                     display: 'flex',

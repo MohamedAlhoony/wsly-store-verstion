@@ -30,6 +30,10 @@ const Location = (props) => {
             })
         )
     }
+
+    const deleteLocation = (location) => {
+        props.dispatch(LayoutActions.handleDeleteLocation(location))
+    }
     return (
         <Grid mt={3} container spacing={1}>
             <Grid
@@ -67,6 +71,7 @@ const Location = (props) => {
             <Grid item xs={12}>
                 {props.locations?.length ? (
                     <Locations
+                        deleteLocation={deleteLocation}
                         handleDisplayLocationClick={handleDisplayLocationClick}
                         locations={props.locations}
                     />

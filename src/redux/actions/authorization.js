@@ -82,6 +82,7 @@ export const signout = () => {
                     message: 'تم تسجيل الخروج',
                 })
             )
+            window.location.reload()
         } catch (err) {
             dispatch(
                 snackBar({
@@ -288,7 +289,7 @@ export const verifyOTP_and_signin = () => {
                 expDate: data.ExpDate,
             })
             const storeId = getState().home_page_reducer.storeId
-            dispatch(makeRequests(storeId))
+            window.location.reload()
             dispatch(authCheck())
             dispatch(
                 snackBar({
@@ -363,11 +364,11 @@ export const authCheck = () => {
             const token = getToken()
             const tokenId = getTokenId()
             if (token) {
-                dispatch({ type: 'AUTHENTICATED' })
                 const userData = await fetchAuthenticatedUser({
                     accessToken: token,
                     tokenId,
                 })
+                dispatch({ type: 'AUTHENTICATED' })
                 dispatch({
                     type: 'authorization_reducer-currentUser',
                     data: userData,

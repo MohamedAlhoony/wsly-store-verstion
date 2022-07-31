@@ -10,6 +10,7 @@ import {
     Typography,
     Avatar,
     Button,
+    CircularProgress,
 } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -21,6 +22,7 @@ const getCard = (location, props) => {
         <Box sx={{ width: 1 }}>
             <Card
                 variant={'elevation'}
+                elevation={2}
                 sx={{
                     height: 1,
                     display: 'flex',
@@ -37,7 +39,7 @@ const getCard = (location, props) => {
                     title={
                         location.LocationName ?? (
                             <Typography color={grey[500]}>
-                                (لايوجد اسم)
+                                (لايوجد اسم للموقع)
                             </Typography>
                         )
                     }
@@ -58,8 +60,12 @@ const getCard = (location, props) => {
                     >
                         عرض الموقع
                     </Button>
-                    <IconButton>
-                        <DeleteIcon color={'error'} />
+                    <IconButton onClick={() => props.deleteLocation(location)}>
+                        {location.isDeleting === true ? (
+                            <CircularProgress size={20} color="error" />
+                        ) : (
+                            <DeleteIcon color={'error'} />
+                        )}
                     </IconButton>
                 </CardActions>
             </Card>
@@ -71,9 +77,10 @@ const getItems = (props) => {
     return props.locations.map((location, key) => {
         return (
             <Grid
-                xs={6}
-                sm={4}
-                md={3}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
                 key={key}
                 justifyContent={'center'}
                 sx={{ display: 'flex' }}
@@ -86,7 +93,7 @@ const getItems = (props) => {
 }
 const Locations = (props) => {
     return (
-        <Grid spacing={1} sx={{ mt: 2 }} container>
+        <Grid spacing={2} sx={{ mt: 2 }} container>
             {getItems(props)}
         </Grid>
     )

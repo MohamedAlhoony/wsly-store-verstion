@@ -18,22 +18,15 @@ export const makeRequests = (storeID) => {
         return new Promise(async (resolve, reject) => {
             try {
                 dispatch(isLoading(true))
-                const [data, userData] = await Promise.all([
+                const [data] = await Promise.all([
                     getOrdersList({
                         storeID,
                         accessToken: getToken(),
                         tokenId: getTokenId(),
                     }),
-                    fetchAuthenticatedUser({
-                        accessToken: getToken(),
-                        tokenId: getTokenId(),
-                    }),
                 ])
                 dispatch({ type: 'home_page-storeId', data: storeID })
-                dispatch({
-                    type: 'authorization_reducer-currentUser',
-                    data: userData,
-                })
+
                 dispatch({
                     type: 'home_page-data',
                     data: normalizeData(data),

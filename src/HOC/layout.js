@@ -27,7 +27,8 @@ import ConfirmCodeModal from '../components/confirmCodeModal/confirmCodeModal'
 import LocationModal from '../components/locationModal/locationModal'
 import DisplayLocationsModal from '../components/displayLocationsModal/locationModal'
 import debounce from 'lodash.debounce'
-
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 const pages = [
     { name: 'حول الشركة', to: 'https://umbrella.ly/about', isExternal: true },
     // { name: 'cart', to: '/cart', isExternal: false },
@@ -495,8 +496,19 @@ const Layout = (props) => {
                     </Toolbar>
                 </Container>
             </AppBar>
-
-            <Outlet />
+            {props.authChecked ? (
+                <Outlet />
+            ) : (
+                <Backdrop
+                    sx={{
+                        color: '#fff',
+                        zIndex: (theme) => theme.zIndex.drawer + 1,
+                    }}
+                    open={true}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            )}
         </Container>
     )
 }

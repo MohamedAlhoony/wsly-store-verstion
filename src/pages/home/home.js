@@ -272,6 +272,7 @@ const Home = (props) => {
                 {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
                 <Box p={1} dir={theme.direction}>
                     <MenuSection
+                        isAvailable={props.isAvailable}
                         isLoading={props.isLoading}
                         handleFilterChange={handleFilterChange}
                         filterValue={props.filterValue}
