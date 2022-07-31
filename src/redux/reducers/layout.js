@@ -26,6 +26,17 @@ const initialState = {
         locationName: '',
         noteForDriver: '',
     },
+    displayLocationsModal: {
+        selectedLocation: { lat: 32.8872, lng: 13.1913 },
+        show: false,
+        isLoading: false,
+        location: { lat: 32.8872, lng: 13.1913 },
+        center: { lat: 32.8872, lng: 13.1913 },
+        zoom: 12,
+        showGuide: true,
+        locationName: '',
+        noteForDriver: '',
+    },
 }
 
 const layout_reducer = (state = initialState, action) => {
@@ -44,6 +55,11 @@ const layout_reducer = (state = initialState, action) => {
             return {
                 ...state,
                 locationModal: action.data,
+            }
+        case 'layout_reducer-displayLocationsModal':
+            return {
+                ...state,
+                displayLocationsModal: action.data,
             }
         default:
             return state

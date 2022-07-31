@@ -10,25 +10,28 @@ import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions/location'
 import AddLocationModal from './addLocationModal/addLocationModal'
-
+import Locations from './locations/locations'
+import * as LayoutActions from '../../redux/actions/layout'
 const Location = (props) => {
     const navigate = useNavigate()
 
-    const toggleAddLocationModal = () => {
+    const toggleLocationModal = () => {
         props.dispatch(
-            actions.addLocationModal({ show: !props.addLocationModal.show })
+            LayoutActions.locationModal({ show: !props.locationModal.show })
         )
     }
-    const updateMapCenter = ({ lat, lng }) => {
-        props.dispatch(actions.addLocationModal({ mapCenter: { lat, lng } }))
+    const handleDisplayLocationClick = (location) => {
+        props.dispatch(
+            LayoutActions.displayLocationsModal({
+                show: !props.displayLocationsModal.show,
+                zoom: 19,
+                selectedLocation: { lat: location.Lat, lng: location.Lang },
+                center: { lat: location.Lat, lng: location.Lang },
+            })
+        )
     }
     return (
         <Grid mt={3} container spacing={1}>
-            <AddLocationModal
-                updateMapCenter={updateMapCenter}
-                addLocationModal={props.addLocationModal}
-                toggleAddLocationModal={toggleAddLocationModal}
-            />
             <Grid
                 item
                 xs={12}
@@ -53,7 +56,7 @@ const Location = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Button
-                    onClick={toggleAddLocationModal}
+                    onClick={toggleLocationModal}
                     endIcon={<AddIcon />}
                     size={'large'}
                     variant="contained"
@@ -62,8 +65,11 @@ const Location = (props) => {
                 </Button>
             </Grid>
             <Grid item xs={12}>
-                {props.locations.length ? (
-                    <div>test</div>
+                {props.locations?.length ? (
+                    <Locations
+                        handleDisplayLocationClick={handleDisplayLocationClick}
+                        locations={props.locations}
+                    />
                 ) : (
                     <Alert sx={{ mt: 2 }} severity="info">
                         لايوجد لديك مواقع إلى حد الآن, قم بإضافة موقعك
@@ -74,9 +80,13 @@ const Location = (props) => {
     )
 }
 
-export default connect(({ location_page_reducer }) => {
-    return {
-        locations: location_page_reducer.locations,
-        addLocationModal: location_page_reducer.addLocationModal,
+export default connect(
+    ({ location_page_reducer, authorization_reducer, layout_reducer }) => {
+        return {
+            locations: authorization_reducer.currentUser?.Locations,
+            addLocationModal: location_page_reducer.addLocationModal,
+            locationModal: layout_reducer.locationModal,
+            displayLocationsModal: layout_reducer.displayLocationsModal,
+        }
     }
-})(Location)
+)(Location)

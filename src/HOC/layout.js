@@ -13,6 +13,7 @@ import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Divider from '@mui/material/Divider'
 import LogoutIcon from '@mui/icons-material/Logout'
+import LocationOnOutlined from '@mui/icons-material/LocationOnOutlined'
 import { Link, Outlet } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { snackBar } from '../redux/actions/home'
@@ -24,6 +25,7 @@ import SigninModal from '../components/signinModal/signinModal'
 import { useNavigate } from 'react-router-dom'
 import ConfirmCodeModal from '../components/confirmCodeModal/confirmCodeModal'
 import LocationModal from '../components/locationModal/locationModal'
+import DisplayLocationsModal from '../components/displayLocationsModal/locationModal'
 import debounce from 'lodash.debounce'
 
 const pages = [
@@ -80,6 +82,14 @@ const _updateMapCenter = debounce(({ lat, lng }, props) => {
 
 const _updateMapZoom = debounce(({ zoom }, props) => {
     props.dispatch(actions.locationModal({ zoom }))
+}, 300)
+
+const _displayLocationsUpdateMapCenter = debounce(({ lat, lng }, props) => {
+    props.dispatch(actions.displayLocationsModal({ center: { lat, lng } }))
+}, 300)
+
+const _displayLocationsUpdateMapZoom = debounce(({ zoom }, props) => {
+    props.dispatch(actions.displayLocationsModal({ zoom }))
 }, 300)
 const Layout = (props) => {
     useEffect(() => {
@@ -175,6 +185,27 @@ const Layout = (props) => {
     const handleLocationModalInputChange = ({ id, value }) => {
         props.dispatch(actions.locationModal({ [id]: value }))
     }
+
+    const displayLocationsUpdateMapZoom = ({ zoom }) => {
+        _displayLocationsUpdateMapZoom({ zoom }, props)
+    }
+    const displayLocationsToggleLocationModal = () => {
+        props.dispatch(
+            actions.displayLocationsModal({
+                show: !props.displayLocationsModal.show,
+            })
+        )
+    }
+    const displayLocationsUpdateMapCenter = ({ lat, lng }) => {
+        _displayLocationsUpdateMapCenter({ lat, lng }, props)
+        props.dispatch(
+            actions.displayLocationsModal({
+                location: { lat, lng },
+                showGuide: false,
+            })
+        )
+    }
+
     return (
         <Container sx={{ px: 1 }}>
             <SnackBar closeSnackBar={closeSnackBar} snackBar={props.snackBar} />
@@ -187,6 +218,16 @@ const Layout = (props) => {
                 locationModal={props.locationModal}
                 toggleLocationModal={toggleLocationModal}
                 handleLocationModalInputChange={handleLocationModalInputChange}
+            />
+            <DisplayLocationsModal
+                locations={props.currentUser?.Locations}
+                // handleFindUserLocation={handleFindUserLocation}
+                // handleLocationSubmit={handleLocationSubmit}
+                updateMapCenter={displayLocationsUpdateMapCenter}
+                updateMapZoom={displayLocationsUpdateMapZoom}
+                locationModal={props.displayLocationsModal}
+                toggleLocationModal={displayLocationsToggleLocationModal}
+                // handleLocationModalInputChange={handleLocationModalInputChange}
             />
             <SigninModal
                 signin={signin}
@@ -418,15 +459,18 @@ const Layout = (props) => {
                                         >
                                             <InfoIcon />
                                             &nbsp; معلوماتي
-                                        </MenuItem>
+                                        </MenuItem> */}
                                         <MenuItem
                                             disableRipple
-                                            onClick={handleCloseUserMenu}
+                                            onClick={() => {
+                                                navigate('/location')
+                                                handleCloseUserMenu()
+                                            }}
                                         >
-                                            <FormatListBulletedIcon />
-                                            &nbsp; طلباتي
+                                            <LocationOnOutlined />
+                                            &nbsp; مواقعي
                                         </MenuItem>
-                                        <Divider /> */}
+                                        <Divider />
                                         <MenuItem
                                             disableRipple
                                             onClick={() => {
@@ -466,6 +510,7 @@ export default connect(
             authChecked: authorization_reducer.authChecked,
             currentUser: authorization_reducer.currentUser,
             locationModal: layout_reducer.locationModal,
+            displayLocationsModal: layout_reducer.displayLocationsModal,
         }
     }
 )(Layout)

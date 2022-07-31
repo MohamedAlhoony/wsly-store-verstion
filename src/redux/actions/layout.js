@@ -65,6 +65,17 @@ export const locationModal = (value) => {
         })
     }
 }
+export const displayLocationsModal = (value) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: 'layout_reducer-displayLocationsModal',
+            data: {
+                ...getState().layout_reducer.displayLocationsModal,
+                ...value,
+            },
+        })
+    }
+}
 
 export const handleFindUserLocation = () => {
     return (dispatch) => {

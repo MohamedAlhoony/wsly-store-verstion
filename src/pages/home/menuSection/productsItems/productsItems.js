@@ -38,12 +38,7 @@ const getCard = (item, handleItemListClick, cart) => {
                     justifyContent: 'space-between',
                 }}
             >
-                <CardHeader
-                    title={item.Name}
-                    // subheader={[
-                    //     <span key={0}>{getQuentity(item.Id, cart)}</span>,
-                    // ]}
-                />
+                <CardHeader title={item.Name} />
                 <CardContent></CardContent>
                 <CardActions sx={{ justifyContent: 'space-between' }}>
                     <IconButton onClick={() => handleItemListClick(item)}>
@@ -79,7 +74,8 @@ const getItems = (props) => {
         return (
             <Grid
                 xs={6}
-                sm={'auto'}
+                sm={4}
+                md={3}
                 key={key}
                 justifyContent={'center'}
                 sx={{ display: 'flex' }}
