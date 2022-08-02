@@ -1,6 +1,7 @@
 import { base_url } from '../../config'
 import { getToken, getTokenId, fetchAuthenticatedUser } from './authorization'
 import axios from 'axios'
+import { css } from '@emotion/react'
 
 const normalizeData = (data) => {
     let categories = data.StoreMenue.categories.slice()
@@ -36,10 +37,8 @@ export const makeRequests = (storeID) => {
                         data.StoreMenue.categories[0].Id
                     )
                 )
-                if (data.Persons?.length) {
-                    dispatch({ type: 'home_page-forNameOptions', data: [] })
-                    dispatch(addPersonsToList(data.Persons))
-                }
+                dispatch({ type: 'home_page-forNameOptions', data: [] })
+                dispatch(addPersonsToList(data.Persons))
                 dispatch(isLoading(false))
                 resolve(data)
             } catch (error) {
@@ -255,46 +254,63 @@ export const addToCart = () => {
     }
 }
 
-export const addPersonsToList = (persons) => {
+export const addPersonsToList = (storePersons) => {
     return (dispatch, getState) => {
-        let forNameOptions = getState().home_page_reducer.forNameOptions.slice()
+        let list = []
         let listItems = getState().home_page_reducer.listItems.slice()
         const userPersons =
             getState().authorization_reducer.currentUser?.Persons ?? []
-        userPersons.forEach((person) => {
-            forNameOptions.unshift({
-                forName: person.PersonName,
-                items: [],
-                id: person.PersonID,
-            })
-        })
-        persons.forEach((person, personIndex) => {
-            let personObjIndex = forNameOptions.findIndex(
-                (personItem) => personItem.PersonID === person.id
+        userPersons.forEach((userPerson) => {
+            let matchedPerson = storePersons.find(
+                (storePerson) => storePerson.PersonID === userPerson.PersonID
             )
-            person.items.forEach((item, itemIndex) => {
-                const listItemIndex = listItems.findIndex(
-                    (oItem) => oItem.Id === item.id
-                )
-
-                let preferences = listItems[listItemIndex].preferences
-
-                item.clientPreferences.forEach(
-                    (clientPreference, clientPreferenceIndex) => {
-                        preferences[clientPreferenceIndex].choiceValue =
-                            preferences[[clientPreferenceIndex]].choices.find(
-                                (choice) =>
-                                    choice.Id === clientPreference.ChoiceID
-                            )
-                    }
-                )
-                forNameOptions[personObjIndex].items.push({
-                    ...listItems[listItemIndex],
-                    preferences: preferences,
+            if (matchedPerson) {
+                list.push({
+                    forName: userPerson.PersonName,
+                    items: matchedPerson.items,
                 })
-            })
+            } else {
+                list.push({
+                    forName: userPerson.PersonName,
+                    items: [],
+                })
+            }
         })
-        dispatch({ type: 'home_page-forNameOptions', data: forNameOptions })
+        list = list.map((listItem) => {
+            return {
+                ...listItem,
+                items: listItem.items.map((product) => {
+                    let matchedItem = listItems.find(
+                        (oItem) => oItem.Id === product.id
+                    )
+                    let preferences = matchedItem.preferences.map((pref) => {
+                        const userChoice = pref.choices.find((choice) => {
+                            return (
+                                choice.Id ===
+                                product.clientPreferences.find(
+                                    (clientPref) =>
+                                        clientPref.preferenceID === pref.id
+                                )?.ChoiceID
+                            )
+                        })
+                        return {
+                            ...pref,
+                            choices: pref.choices.map((choice) => {
+                                return { ...choice }
+                            }),
+                            choiceValue: userChoice
+                                ? {
+                                      ...userChoice,
+                                  }
+                                : { ...pref.choice },
+                            choice: { ...pref.choice },
+                        }
+                    })
+                    return { ...matchedItem, preferences }
+                }),
+            }
+        })
+        dispatch({ type: 'home_page-forNameOptions', data: list })
     }
 }
 

@@ -61,11 +61,7 @@ const getCard = (location, props) => {
                         عرض الموقع
                     </Button>
                     <IconButton onClick={() => props.deleteLocation(location)}>
-                        {location.isDeleting === true ? (
-                            <CircularProgress size={20} color="error" />
-                        ) : (
-                            <DeleteIcon color={'error'} />
-                        )}
+                        <DeleteIcon color={'error'} />
                     </IconButton>
                 </CardActions>
             </Card>

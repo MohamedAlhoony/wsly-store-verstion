@@ -22,9 +22,6 @@ import { Typography } from '@mui/material'
 export default function OrderModal(props) {
     return (
         <div>
-            {/* <Button variant="outlined" onClick={handleClickOpen}>
-                Open form dialog
-            </Button> */}
             <Dialog
                 dir="rtl"
                 fullWidth
@@ -36,7 +33,7 @@ export default function OrderModal(props) {
                     طلب: {props.orderModal.listItem?.Name}
                 </DialogTitle>
 
-                <DialogContent>
+                <DialogContent style={{ height: '100vh' }}>
                     {props.orderModal.isLoading ? (
                         <Grid
                             item

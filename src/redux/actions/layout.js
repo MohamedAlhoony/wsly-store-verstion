@@ -223,22 +223,11 @@ const addLocationRequest = ({
 export const handleDeleteLocation = (location) => {
     return async (dispatch, getState) => {
         try {
-            const userData = getState().authorization_reducer.currentUser
-            let index = userData.Locations.findIndex((item) => {
-                console.log(item.LocationID, location.LocationID)
-                return location.locationID === item.locationID
-            })
-            userData.Locations[index].isDeleting = true
-            dispatch({
-                type: 'authorization_reducer-currentUser',
-                data: userData,
-            })
             const body = await deleteLocationRequest({
                 accessToken: getToken(),
                 tokenId: getTokenId(),
                 locationId: location.LocationID,
             })
-
             dispatch(
                 snackBar({
                     show: true,
@@ -247,6 +236,14 @@ export const handleDeleteLocation = (location) => {
                     message: 'تم الحذف بنجاح',
                 })
             )
+            const userData = await fetchAuthenticatedUser({
+                accessToken: getToken(),
+                tokenId: getTokenId(),
+            })
+            dispatch({
+                type: 'authorization_reducer-currentUser',
+                data: userData,
+            })
         } catch (err) {
             console.log(err)
             dispatch(locationModal({ isLoading: false }))
