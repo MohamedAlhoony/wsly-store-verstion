@@ -129,8 +129,7 @@ export const handleLocationSubmit = () => {
                 })
             )
             const location = getState().layout_reducer.locationModal.location
-            const submitModal = getState().home_page_reducer.submitModal
-            console.log(submitModal)
+            const submitModalObj = getState().home_page_reducer.submitModal
             const noteForDriver =
                 getState().layout_reducer.locationModal.noteForDriver
             const locationName =
@@ -150,7 +149,7 @@ export const handleLocationSubmit = () => {
                 type: 'authorization_reducer-currentUser',
                 data: userData,
             })
-            if (submitModal.show) {
+            if (submitModalObj.show === true) {
                 dispatch(
                     submitModal({
                         selectedLocation:
@@ -174,6 +173,7 @@ export const handleLocationSubmit = () => {
                 })
             )
         } catch (err) {
+            console.log(err)
             dispatch(locationModal({ isLoading: false }))
             dispatch(
                 snackBar({
