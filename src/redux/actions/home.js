@@ -372,7 +372,7 @@ const submitRequest = ({
     })
 }
 
-const addNewPersonRequest = ({ accessToken, tokenId, name }) => {
+export const addNewPersonRequest = ({ accessToken, tokenId, name }) => {
     return new Promise(async (resolve, reject) => {
         var myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')

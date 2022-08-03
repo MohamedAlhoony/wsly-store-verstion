@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Divider from '@mui/material/Divider'
 import LogoutIcon from '@mui/icons-material/Logout'
 import LocationOnOutlined from '@mui/icons-material/LocationOnOutlined'
+import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import { Link, Outlet } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { snackBar } from '../redux/actions/home'
@@ -62,9 +63,10 @@ const StyledMenu = styled((props) => (
             padding: '4px 0',
         },
         '& .MuiMenuItem-root': {
-            fontSize: 15,
+            fontSize: 16,
+            height: 48,
             '& .MuiSvgIcon-root': {
-                fontSize: 19,
+                fontSize: 22,
                 color: theme.palette.secondary.main,
                 // marginRight: theme.spacing(1),
             },
@@ -470,6 +472,16 @@ const Layout = (props) => {
                                         >
                                             <LocationOnOutlined />
                                             &nbsp; مواقعي
+                                        </MenuItem>
+                                        <MenuItem
+                                            disableRipple
+                                            onClick={() => {
+                                                navigate('/person')
+                                                handleCloseUserMenu()
+                                            }}
+                                        >
+                                            <PersonOutlined />
+                                            &nbsp; الأشخاص
                                         </MenuItem>
                                         <Divider />
                                         <MenuItem
