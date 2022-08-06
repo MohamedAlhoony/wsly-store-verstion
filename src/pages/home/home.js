@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
@@ -50,7 +50,6 @@ const Home = (props) => {
 
         return (
             <div
-                role="tabpanel"
                 hidden={value !== index}
                 id={`simple-tabpanel-${index}`}
                 aria-labelledby={`simple-tab-${index}`}
@@ -60,6 +59,7 @@ const Home = (props) => {
             </div>
         )
     }
+
     const handleCategoryInputValueChange = (value) => {
         props.dispatch(actions.handleCategoryInputValueChange(value))
     }

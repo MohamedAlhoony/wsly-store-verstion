@@ -12,6 +12,9 @@ import {
 } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PaidIcon from '@mui/icons-material/Paid'
+import SwipeableViews from 'react-swipeable-views'
+import { useTheme } from '@mui/material/styles'
+
 import { StyledBadge } from '../../home'
 const getQuentity = (id, cart) => {
     let qtySum = 0
@@ -70,8 +73,8 @@ const getCard = (item, handleItemListClick, cart) => {
     )
 }
 
-const getItems = (props) => {
-    return props.filteredListItems.map((listItem, key) => {
+const getItems = (props, items) => {
+    return items.map((listItem, key) => {
         return (
             <Grid
                 xs={6}
@@ -88,10 +91,31 @@ const getItems = (props) => {
     })
 }
 const ProductsItems = (props) => {
+    const theme = useTheme()
     return (
-        <Grid spacing={1} sx={{ mt: 2 }} container>
-            {getItems(props)}
-        </Grid>
+        <SwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={props.categoryInputValue}
+            onChangeIndex={(index) =>
+                props.handleCategoryInputValueChange(index)
+            }
+        >
+            {props.categories?.map((category, key) => {
+                return (
+                    <Grid
+                        sx={{ p: 1, mt: 1 }}
+                        dir={'rtl'}
+                        key={key}
+                        item
+                        xs={12}
+                    >
+                        <Grid container spacing={1}>
+                            {getItems(props, category.items)}
+                        </Grid>
+                    </Grid>
+                )
+            })}
+        </SwipeableViews>
     )
 }
 

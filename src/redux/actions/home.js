@@ -4,13 +4,13 @@ import axios from 'axios'
 import { css } from '@emotion/react'
 
 const normalizeData = (data) => {
-    let categories = data.StoreMenue.categories.slice()
-    let allItems = []
-    categories.forEach((category) => {
-        allItems = allItems.concat(category.items)
-    })
-    categories.unshift({ Name: 'كل الأصناف', Id: 0, items: allItems })
-    data.StoreMenue.categories = categories
+    // let categories = data.StoreMenue.categories.slice()
+    // let allItems = []
+    // categories.forEach((category) => {
+    //     allItems = allItems.concat(category.items)
+    // })
+    // categories.unshift({ Name: 'كل الأصناف', Id: 0, items: allItems })
+    // data.StoreMenue.categories = categories
 
     return data
 }
@@ -34,7 +34,8 @@ export const makeRequests = (storeID) => {
                 })
                 dispatch(
                     handleCategoryInputValueChange(
-                        data.StoreMenue.categories[0].Id
+                        // data.StoreMenue.categories[0].Id
+                        0
                     )
                 )
                 dispatch({ type: 'home_page-forNameOptions', data: [] })
@@ -87,9 +88,7 @@ export const handleCategoryInputValueChange = (value) => {
     return (dispatch, getState) => {
         const categories =
             getState().home_page_reducer.data.StoreMenue.categories.slice()
-        const listItems = categories.find(
-            (category) => category.Id === value
-        ).items
+        const listItems = categories[value]?.items ?? []
         dispatch({ type: 'home_page-categoryInputValue', data: value })
         dispatch(updateListItems(listItems))
         dispatch(updateFilteredListItems(listItems))

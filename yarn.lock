@@ -8487,6 +8487,11 @@ react-swipeable-views@^0.14.0:
     react-swipeable-views-utils "^0.14.0"
     warning "^4.0.1"
 
+react-tabs-scrollable@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-tabs-scrollable/-/react-tabs-scrollable-1.0.8.tgz#a68d15c43d895af057188571e5f04e5463454833"
+  integrity sha512-iWD7UfJQpkI+9KBHRRDgNvkH6Wq10/5oAoctl6g/O86rMiPUUUAhB1sitwuR0Nqp4KGRTlfNp16EZnCBFyhvgQ==
+
 react-transition-group@^4.4.2:
   version "4.4.2"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.2.tgz"
