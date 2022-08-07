@@ -256,7 +256,12 @@ export const addToCart = () => {
 export const addPersonsToList = (storePersons) => {
     return (dispatch, getState) => {
         let list = []
-        let listItems = getState().home_page_reducer.listItems.slice()
+        let listItems = []
+        let categories =
+            getState().home_page_reducer.data.StoreMenue.categories.slice()
+        categories.forEach((category) => {
+            listItems.push(...category.items)
+        })
         const userPersons =
             getState().authorization_reducer.currentUser?.Persons ?? []
         userPersons.forEach((userPerson) => {

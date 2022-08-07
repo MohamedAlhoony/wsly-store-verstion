@@ -375,6 +375,7 @@ export const authCheck = () => {
                 })
             } else {
                 dispatch({ type: 'NOT_AUTHENTICATED' })
+                dispatch(signinModal({ show: true }))
             }
         } catch (err) {
             console.log(err)

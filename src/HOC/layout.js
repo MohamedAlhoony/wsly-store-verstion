@@ -30,6 +30,7 @@ import DisplayLocationsModal from '../components/displayLocationsModal/locationM
 import debounce from 'lodash.debounce'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import Alert from '@mui/material/Alert'
 const pages = [
     { name: 'حول الشركة', to: 'https://umbrella.ly/about', isExternal: true },
     // { name: 'cart', to: '/cart', isExternal: false },
@@ -509,7 +510,13 @@ const Layout = (props) => {
                 </Container>
             </AppBar>
             {props.authChecked ? (
-                <Outlet />
+                props.loggedIn ? (
+                    <Outlet />
+                ) : (
+                    <Alert sx={{ mt: 2 }} severity="info">
+                        يجب عليك تسجيل الدخول
+                    </Alert>
+                )
             ) : (
                 <Backdrop
                     sx={{
