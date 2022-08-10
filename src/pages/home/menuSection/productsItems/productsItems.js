@@ -99,7 +99,7 @@ const getCard = (item, handleItemListClick, cart, loggedIn, isAvailable) => {
                             height: 1,
                             position: 'absolute',
                             zIndex: 10,
-                            background: grey[200],
+                            background: grey[500],
                         }}
                     />
                 )}
