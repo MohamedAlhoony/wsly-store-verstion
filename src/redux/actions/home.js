@@ -87,7 +87,7 @@ const getOrdersList = ({ storeID, accessToken, tokenId }) => {
 export const handleCategoryInputValueChange = (value) => {
     return (dispatch, getState) => {
         const categories =
-            getState().home_page_reducer.data.StoreMenue.categories.slice()
+            getState().home_page_reducer.data.StoreMenue.categories?.slice()
         const listItems = categories[value]?.items ?? []
         dispatch({ type: 'home_page-categoryInputValue', data: value })
         dispatch(updateListItems(listItems))

@@ -121,7 +121,7 @@ export default function SigninModal(props) {
                     disabled={props.signinModal.isLoading}
                     onClick={props.handleToggleSigninModal}
                 >
-                    إلغاء
+                    إغلاق
                 </Button>
             </DialogActions>
         </Dialog>

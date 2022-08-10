@@ -191,7 +191,7 @@ export default function OrderModal(props) {
                         disabled={props.orderModal.isLoading}
                         onClick={props.handleCloseOrderModal}
                     >
-                        إلغاء
+                        إغلاق
                     </Button>
                     <Button
                         disabled={props.orderModal.isLoading}

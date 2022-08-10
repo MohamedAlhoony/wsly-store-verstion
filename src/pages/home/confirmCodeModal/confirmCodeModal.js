@@ -105,7 +105,7 @@ export default function ConfirmCodeModal(props) {
                     disabled={props.confirmCodeModal.isLoading}
                     onClick={props.handleToggleConfirmCodeModal}
                 >
-                    إلغاء
+                    إغلاق
                 </Button>
             </DialogActions>
         </Dialog>

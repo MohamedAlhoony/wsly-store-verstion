@@ -29,14 +29,10 @@ const getSkeleton = () => {
 
 const MenuSection = (props) => {
     return !props.isLoading ? (
-        props.isAvailable ? (
-            <Box>
-                <TopForm {...props} />
-                <ProductsItems {...props} />
-            </Box>
-        ) : (
-            <Alert severity="info">المتجر مغلق في الوقت الحالي</Alert>
-        )
+        <Box>
+            <TopForm {...props} />
+            <ProductsItems {...props} />
+        </Box>
     ) : (
         <Box>
             <Grid spacing={1} sx={{ mt: 2 }} container>

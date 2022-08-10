@@ -510,13 +510,7 @@ const Layout = (props) => {
                 </Container>
             </AppBar>
             {props.authChecked ? (
-                props.loggedIn ? (
-                    <Outlet />
-                ) : (
-                    <Alert sx={{ mt: 2 }} severity="info">
-                        يجب عليك تسجيل الدخول
-                    </Alert>
-                )
+                <Outlet />
             ) : (
                 <Backdrop
                     sx={{

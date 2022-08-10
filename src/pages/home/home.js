@@ -5,6 +5,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import Alert from '@mui/material/Alert'
 import MenuSection from './menuSection/menuSection'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions/home'
@@ -21,12 +22,23 @@ import SwipeableViews from 'react-swipeable-views'
 import debounce from 'lodash.debounce'
 // import ConfirmCodeModal from './confirmCodeModal/confirmCodeModal'
 import { useTheme } from '@mui/material/styles'
-export const StyledBadge = styled(Badge)(({ theme }) => ({
+export const StyledBadge = styled(Badge)(({ theme, badgestyle }) => ({
     '& .MuiBadge-badge': {
         right: -3,
         top: 13,
         border: `2px solid ${theme.palette.background.paper}`,
         padding: '0 4px',
+    },
+}))
+export const NotAvailableBadge = styled(Badge)(({ theme, display }) => ({
+    '& .MuiBadge-badge ': {
+        right: -35,
+        top: -15,
+        zIndex: 20,
+        transform: 'rotate(-45deg)',
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: 9,
+        display,
     },
 }))
 const _handleFilterChange = debounce((props) => {
@@ -264,6 +276,11 @@ const Home = (props) => {
                     />
                 </Tabs>
             </Box>
+            {!props.loggedIn && (
+                <Alert sx={{ my: 1 }} severity="info">
+                    يجب عليك تسجيل الدخول لتتمكن من الطلب
+                </Alert>
+            )}
             <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
@@ -272,6 +289,7 @@ const Home = (props) => {
                 {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
                 <Box p={1} dir={theme.direction}>
                     <MenuSection
+                        loggedIn={props.loggedIn}
                         isAvailable={props.isAvailable}
                         isLoading={props.isLoading}
                         handleFilterChange={handleFilterChange}

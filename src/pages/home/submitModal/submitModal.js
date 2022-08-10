@@ -96,7 +96,7 @@ export default function SubmitModal(props) {
                     disabled={props.submitModal.isLoading}
                     onClick={props.handleToggleSubmitModal}
                 >
-                    إلغاء
+                    إغلاق
                 </Button>
             </DialogActions>
         </Dialog>

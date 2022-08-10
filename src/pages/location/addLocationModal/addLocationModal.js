@@ -62,7 +62,7 @@ export default function SubmitModal(props) {
                     disabled={props.addLocationModal.isLoading}
                     onClick={props.toggleAddLocationModal}
                 >
-                    إلغاء
+                    إغلاق
                 </Button>
             </DialogActions>
         </Dialog>

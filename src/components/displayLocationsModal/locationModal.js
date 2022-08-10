@@ -62,7 +62,7 @@ export default function LocationModal(props) {
                     disabled={props.locationModal.isLoading}
                     onClick={props.toggleLocationModal}
                 >
-                    الغاء
+                    إغلاق
                 </Button>
             </DialogActions>
         </Dialog>

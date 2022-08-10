@@ -80,7 +80,7 @@ export default function SubmitModal(props) {
                     disabled={props.addPersonModal.isLoading}
                     onClick={props.togglePersonModal}
                 >
-                    إلغاء
+                    إغلاق
                 </Button>
             </DialogActions>
         </Dialog>
