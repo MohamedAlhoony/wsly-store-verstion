@@ -82,9 +82,12 @@ const getCard = (item, handleItemListClick, cart, loggedIn, isAvailable) => {
     }
     return (
         <NotAvailableBadge
-            display={!item.IsAvailable ? 'flex' : 'none'}
+            invisible={
+                !item.IsAvailable || !loggedIn || !isAvailable ? false : true
+            }
             color={'error'}
             badgeContent={message}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
             style={{ width: '100%' }}
         >
             <Box sx={{ width: 1, position: 'relative' }}>
@@ -207,7 +210,7 @@ const ProductsItems = (props) => {
             {props.categories?.map((category, key) => {
                 return (
                     <Grid
-                        sx={{ p: 1, mt: 1 }}
+                        sx={{ p: 1, mt: 1, display: 'flex' }}
                         dir={'rtl'}
                         key={key}
                         item

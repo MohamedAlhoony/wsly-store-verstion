@@ -3,7 +3,7 @@ let defaultState = {
     data: null,
     cart: [],
     storeId: null,
-    categoryInputValue: '',
+    categoryInputValue: 0,
     listItems: [],
     filteredListItems: [],
     forNameOptions: [],

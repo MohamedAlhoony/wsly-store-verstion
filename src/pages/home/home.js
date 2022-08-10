@@ -30,15 +30,14 @@ export const StyledBadge = styled(Badge)(({ theme, badgestyle }) => ({
         padding: '0 4px',
     },
 }))
-export const NotAvailableBadge = styled(Badge)(({ theme, display }) => ({
+export const NotAvailableBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge ': {
-        right: -35,
-        top: -15,
+        top: 0,
+        left: 25,
         zIndex: 20,
-        transform: 'rotate(-45deg)',
+        // transform: 'rotate(-45deg)',
         border: `2px solid ${theme.palette.background.paper}`,
         padding: 9,
-        display,
     },
 }))
 const _handleFilterChange = debounce((props) => {
