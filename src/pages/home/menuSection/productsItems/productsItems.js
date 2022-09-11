@@ -9,53 +9,16 @@ import {
     CardContent,
     Typography,
     Avatar,
-    Badge,
-    colors,
+    // Badge,
+    // colors,
 } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
-import PaidIcon from '@mui/icons-material/Paid'
+// import PaidIcon from '@mui/icons-material/Paid'
 import SwipeableViews from 'react-swipeable-views'
 import { useTheme } from '@mui/material/styles'
-import { color, styled } from '@mui/system'
-import { NotAvailableBadge, StyledBadge } from '../../home'
-import BadgeUnstyled, { BadgeUnstyledProps } from '@mui/base/BadgeUnstyled'
+import { NotAvailableBadge } from '../../home'
 import { grey } from '@mui/material/colors'
 
-const StyledBadgeBadge = styled('span')`
-    z-index: auto;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
-    color: #fff;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
-    white-space: nowrap;
-    text-align: center;
-    background: #ff4d4f;
-    border-radius: 10px;
-    box-shadow: 0 0 0 1px #fff;
-`
-const StyledBadgeInnerBadge = styled(StyledBadgeBadge)`
-    background: #00f;
-`
-
-function BadgeContent({ onClick }) {
-    return (
-        <Box
-            component="span"
-            sx={{
-                width: 42,
-                height: 42,
-                borderRadius: '2px',
-                background: '#eee',
-                display: 'inline-block',
-                verticalAlign: 'middle',
-            }}
-            onClick={onClick}
-        />
-    )
-}
 const getQuentity = (id, cart) => {
     let qtySum = 0
     cart.slice().forEach((item) => {
