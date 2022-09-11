@@ -5,6 +5,7 @@ import LocationPage from './pages/location/location'
 import PersonPage from './pages/person/person'
 import PageNotFound from './pages/pageNotFound/pageNotFound'
 import Layout from './HOC/layout'
+// new change
 const Router = () => {
     return (
         <Routes>
