@@ -12,7 +12,6 @@ const Router = () => {
                 <Route index path="/location" element={<LocationPage />} />
                 <Route index path="/person" element={<PersonPage />} />
                 <Route index path="/:storeID" element={<HomePage />} />
-
                 <Route path={'/*'} element={<PageNotFound />} />
             </Route>
         </Routes>
