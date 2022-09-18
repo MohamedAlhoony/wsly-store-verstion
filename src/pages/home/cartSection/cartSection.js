@@ -38,6 +38,22 @@ const CartSection = (props) => {
                 <>
                     <Grid item xs={12}>
                         <Typography
+                            fontSize={'1.3rem'}
+                            component={'div'}
+                            variant={'h5'}
+                            display={'flex'}
+                            alignItems={'center'}
+                        >
+                            <PaidIcon sx={{ fontSize: 'inherit' }} />
+                            المجموع الفرعي:
+                            <strong style={{}}>
+                                &nbsp;{getTotal(props)}&nbsp;
+                            </strong>
+                            دينار ليبي
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography
                             component={'div'}
                             variant={'h5'}
                             display={'flex'}
@@ -46,7 +62,8 @@ const CartSection = (props) => {
                             <PaidIcon sx={{ fontSize: 'inherit' }} />
                             الإجمالي:
                             <strong style={{ color: 'green' }}>
-                                &nbsp;{getTotal(props)}&nbsp;
+                                &nbsp;{getTotal(props) + props.DeliveryCost}
+                                &nbsp;
                             </strong>
                             دينار ليبي
                         </Typography>

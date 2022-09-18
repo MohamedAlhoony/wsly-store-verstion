@@ -160,6 +160,7 @@ const getItems = (props, items) => {
         )
     })
 }
+
 const ProductsItems = (props) => {
     const theme = useTheme()
     return (

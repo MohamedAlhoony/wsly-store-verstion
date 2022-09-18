@@ -43,26 +43,30 @@ export default function SubmitModal(props) {
                 ) : (
                     <>
                         <Grid container spacing={1}>
-                            <Grid item xs={12} sm={6}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            onChange={(e) =>
-                                                props.handleSubmitModalInputChange(
-                                                    {
-                                                        id: 'isDelivery',
-                                                        value: e.target.checked,
-                                                    }
-                                                )
-                                            }
-                                            checked={
-                                                props.submitModal.isDelivery
-                                            }
-                                        />
-                                    }
-                                    label="مع التوصيل"
-                                />
-                            </Grid>
+                            {!props.isDeliveryOnly ? (
+                                <Grid item xs={12} sm={6}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                onChange={(e) =>
+                                                    props.handleSubmitModalInputChange(
+                                                        {
+                                                            id: 'isDelivery',
+                                                            value: e.target
+                                                                .checked,
+                                                        }
+                                                    )
+                                                }
+                                                checked={
+                                                    props.submitModal.isDelivery
+                                                }
+                                            />
+                                        }
+                                        label="مع التوصيل"
+                                    />
+                                </Grid>
+                            ) : null}
+
                             {props.submitModal.isDelivery && (
                                 <Grid item xs={12}>
                                     <Map

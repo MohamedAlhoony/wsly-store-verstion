@@ -227,6 +227,7 @@ const Home = (props) => {
                 </Typography>
             </AppBar>
             <SubmitModal
+                isDeliveryOnly={props.isDeliveryOnly}
                 handleAddLocation={handleAddLocation}
                 handleMarkerClick={handleMarkerClick}
                 locations={props.currentUser?.Locations}
@@ -307,6 +308,7 @@ const Home = (props) => {
                 <Box p={1} dir={theme.direction}>
                     {/* <TabPanel value={value} index={1} dir={theme.direction}> */}
                     <CartSection
+                        DeliveryCost={props.DeliveryCost}
                         handleCartQtyChange={handleCartQtyChange}
                         handleToggleSubmitModal={handleToggleSubmitModal}
                         handleRemoveProduct={handleRemoveProduct}
@@ -323,6 +325,8 @@ export default connect(
     ({ home_page_reducer, authorization_reducer }, props) => {
         return {
             data: home_page_reducer.data,
+            isDeliveryOnly: home_page_reducer.data?.StoreMenue?.IsDeliveryOnly,
+            DeliveryCost: home_page_reducer.data?.StoreMenue?.DeliveryCost ?? 0,
             loggedIn: authorization_reducer.loggedIn,
             currentUser: authorization_reducer.currentUser,
             isLoading: home_page_reducer.isLoading,
