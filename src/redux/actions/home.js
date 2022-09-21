@@ -144,11 +144,64 @@ export const snackBar = (value) => {
 }
 
 export const handleItemListClick = (item) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         item.preferences.forEach((pref) => {
             pref.choiceValue = pref.choice
         })
-        dispatch(orderModal({ show: true, listItem: item }))
+        let forNameOptions = getState().home_page_reducer.forNameOptions.slice()
+        let lowestPersonIdOption
+        forNameOptions.forEach((option) => {
+            if (!lowestPersonIdOption) {
+                lowestPersonIdOption = option
+            }
+            if (option.id < lowestPersonIdOption.id) {
+                lowestPersonIdOption = option
+            }
+        })
+        if (lowestPersonIdOption) {
+            let listItemIndex = lowestPersonIdOption.items.findIndex(
+                (i) => i.Id === item.Id
+            )
+            if (listItemIndex !== -1) {
+                dispatch(
+                    orderModal({
+                        show: true,
+                        forName: lowestPersonIdOption.forName,
+                        listItem: lowestPersonIdOption.items[listItemIndex],
+                    })
+                )
+            } else {
+                dispatch(
+                    orderModal({
+                        show: true,
+                        forName: lowestPersonIdOption.forName,
+                        listItem: item,
+                    })
+                )
+            }
+        } else {
+            dispatch(orderModal({ show: true, listItem: item }))
+        }
+
+        // props.dispatch(actions.orderModal({ forNameErrMsg: '' }))
+        // let listItemIndex = value.items.findIndex(
+        //     (item) => item.Id === props.orderModal.listItem.Id
+        // )
+        // if (listItemIndex !== -1) {
+        //     props.dispatch(
+        //         actions.orderModal({
+        //             forName: value.forName,
+        //             listItem: value.items[listItemIndex],
+        //         })
+        //     )
+        // } else {
+        //     props.dispatch(
+        //         actions.orderModal({
+        //             forName: value.forName,
+        //             listItem: getDefaultPreferences(),
+        //         })
+        //     )
+        // }
     }
 }
 export const handlePrefChange = (value, index) => {
@@ -270,11 +323,13 @@ export const addPersonsToList = (storePersons) => {
             )
             if (matchedPerson) {
                 list.push({
+                    id: userPerson.PersonID,
                     forName: userPerson.PersonName,
                     items: matchedPerson.items,
                 })
             } else {
                 list.push({
+                    id: userPerson.PersonID,
                     forName: userPerson.PersonName,
                     items: [],
                 })
@@ -473,14 +528,18 @@ export const submit = (storeID) => {
             )
             dispatch({ type: 'home_page-cart', data: [] })
         } catch (error) {
-            console.log(error)
+            let errorMessage = 'فشلت عملية الطلب'
+            if (error?.response?.data === 'you are so far from the Store') {
+                errorMessage = 'مكانك بعيد عن المتجر'
+            }
+            console.log(error.response.data)
             dispatch(submitModal({ isLoading: false }))
             dispatch(
                 snackBar({
                     show: true,
                     closeDuration: 4000,
                     severity: 'error',
-                    message: 'فشلت عملية الطلب',
+                    message: errorMessage,
                 })
             )
         }

@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PaidIcon from '@mui/icons-material/Paid'
+import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining'
 import Alert from '@mui/material/Alert'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -45,9 +46,26 @@ const CartSection = (props) => {
                             alignItems={'center'}
                         >
                             <PaidIcon sx={{ fontSize: 'inherit' }} />
-                            المجموع الفرعي:
+                            إجمالي الطلب:
                             <strong style={{}}>
                                 &nbsp;{getTotal(props)}&nbsp;
+                            </strong>
+                            دينار ليبي
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography
+                            component={'div'}
+                            fontSize={'1.3rem'}
+                            variant={'h5'}
+                            display={'flex'}
+                            alignItems={'center'}
+                        >
+                            <DeliveryDiningIcon sx={{ fontSize: 'inherit' }} />
+                            سعر التوصيل:
+                            <strong style={{ color: '' }}>
+                                &nbsp;{props.DeliveryCost}
+                                &nbsp;
                             </strong>
                             دينار ليبي
                         </Typography>
@@ -60,7 +78,7 @@ const CartSection = (props) => {
                             alignItems={'center'}
                         >
                             <PaidIcon sx={{ fontSize: 'inherit' }} />
-                            الإجمالي:
+                            الإجمالي الكلي:
                             <strong style={{ color: 'green' }}>
                                 &nbsp;{getTotal(props) + props.DeliveryCost}
                                 &nbsp;
