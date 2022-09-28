@@ -9,6 +9,7 @@ import {
     CardContent,
     Typography,
     Avatar,
+    Chip,
     // Badge,
     // colors,
 } from '@mui/material'
@@ -116,7 +117,16 @@ const getCard = (item, handleItemListClick, cart, loggedIn, isAvailable) => {
                                 badgeContent={getQuentity(item.Id, cart)}
                             ></StyledBadge> */}
                         </IconButton>
-                        <Avatar
+                        <Chip
+                            label={item.Price + ' د.ل'}
+                            // color={'secondary'}
+                            sx={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                // color: '#fff',
+                            }}
+                        />
+                        {/* <Avatar
                             sx={{
                                 fontSize: 16,
                                 bgcolor: '#f5a62b',
@@ -129,7 +139,7 @@ const getCard = (item, handleItemListClick, cart, loggedIn, isAvailable) => {
                             &nbsp;
                             {item.Price}
                             &nbsp; دينار
-                        </Avatar>
+                        </Avatar> */}
                     </CardActions>
                 </Card>
             </Box>

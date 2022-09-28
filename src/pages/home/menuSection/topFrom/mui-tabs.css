@@ -3,7 +3,7 @@
 }
 .rts___tab {
     margin: 0 2px;
-    padding: 5px 15px;
+    padding: 5px 15px !important;
     position: relative;
     border: 1px solid rgb(162, 162, 162) !important;
     color: #385278;

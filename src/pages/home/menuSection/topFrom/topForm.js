@@ -45,7 +45,7 @@ const TopForm = (props) => {
                         // return <Tab key={key} label={item.Name} />
                         return (
                             <Tab key={key}>
-                                <Typography component={'span'}>
+                                <Typography fontSize={18} component={'span'}>
                                     {item.Name}
                                 </Typography>
                             </Tab>

@@ -30,6 +30,7 @@ import DisplayLocationsModal from '../components/displayLocationsModal/locationM
 import debounce from 'lodash.debounce'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import RestaurantIcon from '@mui/icons-material/Restaurant'
 import Alert from '@mui/material/Alert'
 const pages = [
     { name: 'حول الشركة', to: 'https://umbrella.ly/about', isExternal: true },
@@ -464,6 +465,17 @@ const Layout = (props) => {
                                             <InfoIcon />
                                             &nbsp; معلوماتي
                                         </MenuItem> */}
+                                        <MenuItem
+                                            disableRipple
+                                            onClick={() => {
+                                                navigate('/order')
+                                                handleCloseUserMenu()
+                                            }}
+                                        >
+                                            <RestaurantIcon />
+                                            &nbsp; طلباتي
+                                        </MenuItem>
+
                                         <MenuItem
                                             disableRipple
                                             onClick={() => {

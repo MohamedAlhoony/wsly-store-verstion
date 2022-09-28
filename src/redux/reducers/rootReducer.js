@@ -4,12 +4,16 @@ import location_page_reducer from './location'
 import person_page_reducer from './person'
 import layout_reducer from './layout'
 import authorization_reducer from './authorization'
+import order_page_reducer from './order'
+import orderDetails_page_reducer from './orderDetails'
 const appReducer = combineReducers({
     home_page_reducer,
     location_page_reducer,
     layout_reducer,
     authorization_reducer,
     person_page_reducer,
+    order_page_reducer,
+    orderDetails_page_reducer,
 })
 const appReducer_middleware = (state, action) => {
     switch (action.type) {
@@ -30,6 +34,12 @@ const appReducer_middleware = (state, action) => {
             break
         case 'reset-person_page_reducer':
             state.person_page_reducer = undefined
+            break
+        case 'reset-order_page_reducer':
+            state.order_page_reducer = undefined
+            break
+        case 'reset-orderDetails_page_reducer':
+            state.orderDetails_page_reducer = undefined
             break
 
         default:
