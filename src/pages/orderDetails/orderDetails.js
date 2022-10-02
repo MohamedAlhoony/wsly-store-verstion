@@ -15,6 +15,7 @@ import { useTheme } from '@mui/material/styles'
 import { useParams } from 'react-router-dom'
 
 import SwipeableViews from 'react-swipeable-views'
+import OrdersTable from './ordersTable/ordersTable'
 import OrderList from './ordersList/orderList'
 import * as actions from '../../redux/actions/orderDetails'
 const Order = (props) => {
@@ -60,7 +61,8 @@ const Order = (props) => {
                 </Button>
             </Grid>
             <Grid item xs={12}>
-                <OrderList orderItems={props.orderDetails?.items ?? []} />
+                {/* <OrderList orderItems={props.orderDetails?.items ?? []} /> */}
+                <OrdersTable orderItems={props.orderDetails?.items ?? []} />
             </Grid>
         </Grid>
     )
